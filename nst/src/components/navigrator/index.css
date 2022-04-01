@@ -10,13 +10,13 @@ ul.navigator{
     font-weight:bold;
 }
 
-ul.navigator>li{
+/* ul.navigator>li{
     width: 4em;
-}
+} */
 
-ul.navigator>li:hover{
+/* ul.navigator>li:hover{
     background-color: #8282e3;
-}
+} */
 
 
 
@@ -56,8 +56,8 @@ ul.navigator .sub-navigator{
     list-style-type: none;
     font-size: 1rem;
     background-color: #494998;
-    color:white;
-    width:auto;
+    /* color:white; */
+    /* width:auto; */
     word-wrap: normal;
     white-space: nowrap;
     padding: 0;
@@ -74,9 +74,9 @@ ul.navigator .sub-navigator{
 } */
 
 
-ul.navigator .sub-navigator>li{
+/* ul.navigator .sub-navigator>li{
     padding: 5px 20px;
-}
+} */
 
 ul.navigator .sub-navigator>li:not(:last-child){
     border-bottom: 1px solid black;
@@ -84,4 +84,22 @@ ul.navigator .sub-navigator>li:not(:last-child){
 
 ul.navigator .sub-navigator>li:hover{
     background-color: #8282e3;
+}
+
+.navigator .main-navigator-link{
+    display: inline-block;
+    height: 100%;
+    /* width: 100%; */
+    text-decoration: none;
+    color: white;
+    padding: 5px 30px;
+}
+
+.navigator .navigator-link{
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+    text-decoration: none;
+    color: white;
+    padding: 5px 15px;
 }
