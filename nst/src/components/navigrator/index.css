@@ -11,12 +11,12 @@ ul.navigator{
 }
 
 /* ul.navigator>li{
-    width: 4em;
+    width: 300px;
 } */
 
-/* ul.navigator>li:hover{
+ul.navigator>li:hover{
     background-color: #8282e3;
-} */
+}
 
 
 
@@ -52,7 +52,7 @@ ul.navigator>li.has-sub-nav:hover::after{
 ul.navigator .sub-navigator{
     position: absolute;
     top: 100%;
-    margin-top: 5px;
+    left: 0;
     list-style-type: none;
     font-size: 1rem;
     background-color: #494998;
@@ -61,6 +61,8 @@ ul.navigator .sub-navigator{
     word-wrap: normal;
     white-space: nowrap;
     padding: 0;
+    margin: 0;
+    margin-top: 5px;
     line-height: 3rem;
     display: none;
 }
@@ -94,6 +96,9 @@ ul.navigator .sub-navigator>li:hover{
     color: white;
     padding: 5px 30px;
 }
+/* .navigator .main-navigator-link:hover{
+    background-color: #8282e3;
+} */
 
 .navigator .navigator-link{
     display: inline-block;

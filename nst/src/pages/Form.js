@@ -1,11 +1,12 @@
 import React from "react"
 import { useParams } from "react-router-dom"
+import { Paper } from "../components"
 
-export default function Form(){
-    let params=useParams()
+export default function Form() {
+    let params = useParams()
     return (
-        <div>
+        <Paper>
             form+{params.formId}
-        </div>
+        </Paper>
     )
 }

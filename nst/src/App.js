@@ -1,17 +1,27 @@
 import React from "react";
 import { Navigator } from "./components";
-import { Outlet } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
+import { Home, NotFound, Form } from './pages';
 
 function App() {
   return (
-    <div className="App">
-      <Navigator />
-      <Outlet />
-      {/* <Paper>
-        <ApplicationForm />
-      </Paper> */}
-
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={
+          <div>
+            <Navigator />
+            <Outlet />
+          </div>
+        }>
+          <Route index element={<Home />} />
+          {/* <Route path="home" element={<Home />} /> */}
+          <Route path="forms" element={<div><Outlet /></div>}>
+            <Route path=":formId" element={<Form />} />
+          </Route>
+          <Route path="*" element={<NotFound />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
