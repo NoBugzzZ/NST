@@ -5,7 +5,7 @@ export default class JSONSchemaForm extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = this.getDefaultState(props);
-    this.formdata = props.formdata ? props.formdata : {};
+    this.formdata = props.formdata ? props.formdata : undefined;
     this.register = getRegister();
   }
 
@@ -24,13 +24,20 @@ export default class JSONSchemaForm extends React.PureComponent {
     console.log("JSONSchemaForm render");
     const SchemaField = this.register.field.SchemaField;
     return (
-      <SchemaField
-        schema={this.state.schema}
-        formdata={this.formdata}
-        register={this.register}
-        path="root"
-        setFormdata={this.setFormdata.bind(this)}
-      />
+      <div>
+        <SchemaField
+          schema={this.state.schema}
+          formdata={this.formdata}
+          register={this.register}
+          path="root"
+          setFormdata={this.setFormdata.bind(this)}
+        />
+        <button
+          onClick={()=>{
+            alert(JSON.stringify(this.formdata));
+          }}
+        >Submit</button>
+      </div>
     )
   }
 }

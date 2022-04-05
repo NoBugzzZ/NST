@@ -1,4 +1,5 @@
 import React from "react";
+import { getDefaultTitle } from "../../utils";
 
 export default class StringField extends React.PureComponent {
   constructor(props) {
@@ -8,9 +9,10 @@ export default class StringField extends React.PureComponent {
     this.register = this.props.register;
     this.path=this.props.path;
     this.setFormdata=this.props.setFormdata;
+    this.title=this.schema.title?this.schema.title:getDefaultTitle(this.path);
   }
   render() {
-    console.log("StringField render", this.schema, this.formdata, this.register)
+    console.log("StringField render")
     const { component } = this.schema;
     const Widget = this.register.widget[component];
     return (
@@ -19,6 +21,7 @@ export default class StringField extends React.PureComponent {
         formdata={this.formdata}
         path={this.path}
         setFormdata={this.setFormdata}
+        title={this.title}
       />
     )
   }

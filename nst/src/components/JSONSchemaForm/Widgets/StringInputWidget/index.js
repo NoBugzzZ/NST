@@ -7,13 +7,15 @@ export default class StringInputWidget extends React.PureComponent {
     this.formdata = this.props.formdata;
     this.path=this.props.path;
     this.setFormdata=this.props.setFormdata
+    this.title=this.props.title;
   }
   render() {
-    console.log("StringInputWidget render",this.path,this.setFormdata);
+    console.log("StringInputWidget render");
     return (
       <div>
-        <label htmlFor={this.schema.title}>{this.schema.title}: </label>
-        <input name={this.schema.title} 
+        <p>{this.title}</p>
+        <input id={this.path}
+          defaultValue={this.formdata?this.formdata:''}
           onChange={(e)=>{
             this.setFormdata(this.path,e.target.value);
           }}

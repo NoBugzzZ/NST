@@ -1,4 +1,5 @@
 import React from "react";
+import { getDefaultTitle } from "../../utils";
 
 export default class ObjectField extends React.PureComponent {
   constructor(props) {
@@ -6,13 +7,17 @@ export default class ObjectField extends React.PureComponent {
     this.schema = this.props.schema;
     this.formdata = this.props.formdata;
     this.register = this.props.register;
-    this.path=this.props.path;
-    this.setFormdata=this.props.setFormdata;
+    this.path = this.props.path;
+    this.setFormdata = this.props.setFormdata;
+    this.title=this.schema.title?this.schema.title:getDefaultTitle(this.path);
   }
+
   render() {
-    console.log("ObjectField render", this.schema, this.formdata, this.register);
+    console.log("ObjectField render");
     return (
       <div>
+        <p>{this.title}</p>
+        <hr />
         {
           Object.keys(this.schema.properties).map(key => {
             const SchemaField = this.register.field.SchemaField;

@@ -1,5 +1,16 @@
-import { SchemaField, ObjectField, StringField } from "../Fields";
-import { StringInputWidget } from "../Widgets";
+import {
+  SchemaField,
+  ObjectField,
+  StringField,
+  ArrayField,
+} from "../Fields";
+import {
+  StringInputWidget,
+  CheckboxWidget,
+  RadioWidget,
+  TextareaWidget,
+  ArrayTableWidget
+} from "../Widgets";
 
 export function getRegister() {
   return {
@@ -7,15 +18,20 @@ export function getRegister() {
       SchemaField,
       ObjectField,
       StringField,
+      ArrayField,
     },
     widget: {
       StringInputWidget,
+      CheckboxWidget,
+      RadioWidget,
+      TextareaWidget,
+      ArrayTableWidget
     }
   }
 }
 
 export function setDataToPath(obj, path = "root", value) {
-  // console.log(obj, path, value);
+  console.log(obj, path, value);
   const paths = path.split(".");
   if (paths.length === 1) return value;
   let temp = obj;
@@ -32,4 +48,9 @@ export function setDataToPath(obj, path = "root", value) {
     }
   }
   return obj;
+}
+
+export function getDefaultTitle(path = "root") {
+  const paths = path.split(".");
+  return paths[paths.length - 1];
 }
