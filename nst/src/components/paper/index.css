@@ -9,3 +9,6 @@
     align-items: center;
     padding: 20px;
 }
+.paper>div{
+    overflow-y: scroll;
+}

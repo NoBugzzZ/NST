@@ -1,37 +1,37 @@
 import React from "react";
 
 export default class SchemaField extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.schema = this.props.schema;
-    this.formdata = this.props.formdata;
-    this.register = this.props.register;
-    this.path = this.props.path
-    this.setFormdata = this.props.setFormdata;
-  }
+  // constructor(props) {
+  //   super(props);
+  //   this.schema = this.props.schema;
+  //   this.formdata = this.props.formdata;
+  //   this.register = this.props.register;
+  //   this.path = this.props.path
+  //   this.setFormdata = this.props.setFormdata;
+  // }
   getRenderField() {
-    const { type } = this.schema;
+    const { type } = this.props.schema;
     let Field = null;
     switch (type) {
       case "object":
-        Field = this.register.field.ObjectField;
+        Field = this.props.register.field.ObjectField;
         break;
       case "string":
-        Field = this.register.field.StringField;
+        Field = this.props.register.field.StringField;
         break;
       case "array":
-        Field = this.register.field.ArrayField;
+        Field = this.props.register.field.ArrayField;
         break;
       default:
         break;
     }
     return (
       <Field
-        schema={this.schema}
-        formdata={this.formdata}
-        register={this.register}
-        path={this.path}
-        setFormdata={this.setFormdata}
+        schema={this.props.schema}
+        formdata={this.props.formdata}
+        register={this.props.register}
+        path={this.props.path}
+        setFormdata={this.props.setFormdata}
       />
     )
   }

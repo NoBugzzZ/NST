@@ -34,6 +34,7 @@ export function setDataToPath(obj, path = "root", value) {
   console.log(obj, path, value);
   const paths = path.split(".");
   if (paths.length === 1) return value;
+  obj = obj ? obj : {};
   let temp = obj;
   const len = paths.length;
   for (let i = 1; i < len; i++) {

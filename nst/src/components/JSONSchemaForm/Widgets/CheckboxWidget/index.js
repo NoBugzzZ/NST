@@ -3,19 +3,19 @@ import React from "react";
 export default class CheckboxWidget extends React.PureComponent {
     constructor(props) {
         super(props);
-        this.schema = this.props.schema;
-        this.formdata = this.props.formdata;
-        this.path = this.props.path;
-        this.setFormdata = this.props.setFormdata;
+        // this.schema = this.props.schema;
+        // this.formdata = this.props.formdata;
+        // this.path = this.props.path;
+        // this.setFormdata = this.props.setFormdata;
         this.state = this.formdata ? {formdata:this.formdata} : {formdata:[]};
     }
     render() {
         console.log("CheckboxWidget render");
-        console.log(this.schema)
+        // console.log(this.props.schema)
         return (
             <div>
-                {this.schema.enum ?
-                    this.schema.enum.map((element, index) => {
+                {this.props.schema.enum ?
+                    this.props.schema.enum.map((element, index) => {
                         const findElement=this.state.formdata.find(e=>e===element);
                         const checked=findElement?true:false;
                         return (
@@ -24,7 +24,7 @@ export default class CheckboxWidget extends React.PureComponent {
                             >
                                 <input
                                     type="checkbox"
-                                    id={`${this.path}.${element}`}
+                                    id={`${this.props.path}.${element}`}
                                     checked={checked}
                                     onChange={(e)=>{
                                         this.setState(prev=>{
@@ -35,12 +35,12 @@ export default class CheckboxWidget extends React.PureComponent {
                                             }else{
                                                 newState.formdata.push(element);
                                             }
-                                            this.setFormdata(this.path,newState.formdata);
+                                            this.props.setFormdata(this.props.path,newState.formdata);
                                             return newState;
                                         })
                                     }}
                                 ></input>
-                                <label htmlFor={`${this.path}.${element}`}>{element}</label>
+                                <label htmlFor={`${this.props.path}.${element}`}>{element}</label>
                             </div>
                         )
                     }) : null
