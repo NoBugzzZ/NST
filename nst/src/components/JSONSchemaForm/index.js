@@ -1,4 +1,5 @@
 import React from "react";
+import "./index.css"
 import { getRegister, setDataToPath } from "./utils";
 
 export default class JSONSchemaForm extends React.Component {
@@ -19,7 +20,7 @@ export default class JSONSchemaForm extends React.Component {
   }
 
   render() {
-    console.log("JSONSchemaForm render",this.props);
+    console.log("JSONSchemaForm render", this.props);
     this.formdata = this.props.formdata ? this.props.formdata : undefined;
     const SchemaField = this.register.field.SchemaField;
     return (
@@ -33,11 +34,16 @@ export default class JSONSchemaForm extends React.Component {
               path="root"
               setFormdata={this.setFormdata.bind(this)}
             />
-            <button
-              onClick={() => {
-                alert(JSON.stringify(this.formdata));
-              }}
-            >Submit</button>
+            <div
+              className="form-submit"
+            >
+              <button
+                onClick={() => {
+                  alert(JSON.stringify(this.formdata));
+                }}
+              >Submit</button>
+            </div>
+
           </div>
           : null
         }

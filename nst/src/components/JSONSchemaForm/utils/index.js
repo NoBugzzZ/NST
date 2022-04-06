@@ -55,3 +55,10 @@ export function getDefaultTitle(path = "root") {
   const paths = path.split(".");
   return paths[paths.length - 1];
 }
+
+export function getFontSize(path) {
+  const paths = path.split(".");
+  const len = paths.length - 1;
+  const size = 35 - len * 5;
+  return size >= 16 ? size : 16;
+}

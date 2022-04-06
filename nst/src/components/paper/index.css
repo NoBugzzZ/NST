@@ -10,5 +10,6 @@
     padding: 20px;
 }
 .paper>div{
-    overflow-y: scroll;
+    overflow-x: scroll;
+    width: 90%;
 }

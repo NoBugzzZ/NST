@@ -1,5 +1,5 @@
 import React from "react";
-import { getDefaultTitle } from "../../utils";
+import { getDefaultTitle, getFontSize } from "../../utils";
 
 export default class ArrayField extends React.PureComponent {
     // constructor(props) {
@@ -14,12 +14,20 @@ export default class ArrayField extends React.PureComponent {
     render() {
         console.log("ArrayField render");
         // console.log(this.schema,this.formdata,this.path,this.title)
-        const {component}=this.props.schema;
-        const Widget=this.props.register.widget[component];
-        const title=this.props.schema.title?this.props.schema.title:getDefaultTitle(this.props.path);
+        const { component } = this.props.schema;
+        const Widget = this.props.register.widget[component];
+        const title = this.props.schema.title ?
+            this.props.schema.title :
+            getDefaultTitle(this.props.path);
+        const fontSize = getFontSize(this.props.path);
         return (
             <div>
-                <p>{title}</p>
+                <p
+                    style={{
+                        fontWeight: "bold",
+                        fontSize: `${fontSize}px`,
+                    }}
+                >{title}</p>
                 <hr />
                 <Widget
                     schema={this.props.schema.items}

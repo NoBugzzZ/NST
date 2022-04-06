@@ -1,5 +1,5 @@
 import React from "react";
-import { getDefaultTitle } from "../../utils";
+import { getDefaultTitle, getFontSize } from "../../utils";
 
 export default class ObjectField extends React.PureComponent {
   // constructor(props) {
@@ -14,10 +14,18 @@ export default class ObjectField extends React.PureComponent {
 
   render() {
     console.log("ObjectField render");
-    const title=this.props.schema.title?this.props.schema.title:getDefaultTitle(this.props.path);
+    const title = this.props.schema.title ?
+      this.props.schema.title :
+      getDefaultTitle(this.props.path);
+    const fontSize = getFontSize(this.props.path);
     return (
       <div>
-        <p>{title}</p>
+        <p
+          style={{
+            fontWeight:"bold",
+            fontSize:`${fontSize}px`,
+          }}
+        >{title}</p>
         <hr />
         {
           Object.keys(this.props.schema.properties).map(key => {

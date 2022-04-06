@@ -1,4 +1,5 @@
 import React from "react";
+import "./index.css"
 
 export default class StringInputWidget extends React.PureComponent {
   // constructor(props) {
@@ -15,10 +16,12 @@ export default class StringInputWidget extends React.PureComponent {
     return (
       <div>
         {/* <p>{this.title}</p> */}
-        <input id={this.props.path}
-          defaultValue={this.props.formdata?this.props.formdata:''}
-          onChange={(e)=>{
-            this.props.setFormdata(this.props.path,e.target.value);
+        <input
+          id={this.props.path}
+          className="form-input"
+          defaultValue={this.props.formdata ? this.props.formdata : ''}
+          onChange={(e) => {
+            this.props.setFormdata(this.props.path, e.target.value);
           }}
         ></input>
       </div>

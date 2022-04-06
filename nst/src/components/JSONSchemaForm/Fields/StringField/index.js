@@ -15,10 +15,16 @@ export default class StringField extends React.PureComponent {
     console.log("StringField render")
     const { component } = this.props.schema;
     const Widget = this.props.register.widget[component];
-    const title=this.props.schema.title ? this.props.schema.title : getDefaultTitle(this.props.path);
+    const title = this.props.schema.title ?
+      this.props.schema.title :
+      getDefaultTitle(this.props.path);
     return (
       <>
-        <p>
+        <p
+          style={{
+            fontSize:"18px"
+          }}
+        >
           {title}
         </p>
         <Widget
@@ -26,7 +32,7 @@ export default class StringField extends React.PureComponent {
           formdata={this.props.formdata}
           path={this.props.path}
           setFormdata={this.props.setFormdata}
-          // title={this.title}
+        // title={this.title}
         />
       </>
 

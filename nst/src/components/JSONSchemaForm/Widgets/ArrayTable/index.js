@@ -1,4 +1,5 @@
 import React from "react";
+import "./index.css"
 
 export default class ArrayTableWidget extends React.PureComponent {
     constructor(props) {
@@ -89,6 +90,7 @@ export default class ArrayTableWidget extends React.PureComponent {
                             })}
                             <td>
                                 <button
+                                    className="arraytable-delete-button"
                                     onClick={() => {
                                         this.setState(prev => {
                                             const newState = { formdata: [...prev.formdata] };
@@ -114,7 +116,9 @@ export default class ArrayTableWidget extends React.PureComponent {
         return (
             <div
             >
-                <table>
+                <table
+                    className="form-table"
+                >
                     <thead>
                         {this.getTableHead()}
                     </thead>
@@ -149,21 +153,26 @@ export default class ArrayTableWidget extends React.PureComponent {
                         })
                     } */}
                 </table>
-                <button
-                    onClick={() => {
-                        this.setState(prev => {
-                            const newState = {
-                                formdata: [
-                                    ...prev.formdata,
-                                    this.props.schema.type === "object" ?
-                                        {} : undefined
-                                ]
-                            };
-                            this.props.setFormdata(this.props.path, newState.formdata);
-                            return newState;
-                        })
-                    }}
-                >+</button>
+                <div
+                    className="arraytable-add"
+                >
+                    <button
+                        onClick={() => {
+                            this.setState(prev => {
+                                const newState = {
+                                    formdata: [
+                                        ...prev.formdata,
+                                        this.props.schema.type === "object" ?
+                                            {} : undefined
+                                    ]
+                                };
+                                this.props.setFormdata(this.props.path, newState.formdata);
+                                return newState;
+                            })
+                        }}
+                    >+</button>
+                </div>
+
             </div>
         )
     }

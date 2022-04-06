@@ -1,4 +1,5 @@
 import React from "react";
+import "./index.css"
 
 export default class TextareaWidget extends React.PureComponent {
     // constructor(props) {
@@ -16,6 +17,7 @@ export default class TextareaWidget extends React.PureComponent {
                 {/* <p>{this.title}</p> */}
                 <textarea
                     id={this.props.path}
+                    className="form-textarea"
                     defaultValue={this.props.formdata ? this.props.formdata : ''}
                     onChange={(e) => {
                         this.props.setFormdata(this.props.path, e.target.value);
