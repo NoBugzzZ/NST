@@ -525,5 +525,39 @@ const forms = {
         }
       }
     }
+  },
+  "test": {
+    "type": "object",
+    "title":"test",
+    "properties": {
+      "firstname": {
+        "type": "string",
+        "component":"StringInputWidget"
+      },
+      "lastname": {
+        "type": "string",
+        "component":"StringInputWidget"
+      },
+      "name": {
+        "type": "string",
+        "component":"StringInputWidget",
+        "custom-denpendency": {
+          "denpendencies": ["root.first name", "root.last name"],
+          "value": "$deps[1]+' '+$deps[0]"
+        }
+      },
+      "birthday": {
+        "type": "string",
+        "component":"NumberInputWidget"
+      },
+      "age": {
+        "type": "string",
+        "component":"NumberInputWidget",
+        "custom-denpendency": {
+          "denpendencies": ["root.birthday"],
+          "value": "new Date().getFullYear()-$deps[0]"
+        }
+      }
+    }
   }
 }

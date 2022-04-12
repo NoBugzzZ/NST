@@ -9,7 +9,8 @@ import {
   CheckboxWidget,
   RadioWidget,
   TextareaWidget,
-  ArrayTableWidget
+  ArrayTableWidget,
+  NumberInputWidget,
 } from "../Widgets";
 
 export function getRegister() {
@@ -25,7 +26,8 @@ export function getRegister() {
       CheckboxWidget,
       RadioWidget,
       TextareaWidget,
-      ArrayTableWidget
+      ArrayTableWidget,
+      NumberInputWidget,
     }
   }
 }

@@ -11,6 +11,10 @@ const forms = [
         link: 'JS011',
         name: 'NST－04－JS011－2011－软件测试问题清单（电子记录）'
     },
+    {
+        link: 'test',
+        name: 'test'
+    },
 ];
 
 export default function Navigator() {

@@ -1,4 +1,4 @@
-class Event {
+class XEvent {
     constructor(props) {
         const { schema, formdata } = props;
         this.schema = schema;
@@ -83,6 +83,17 @@ class Event {
             }
         }
     }
+    notify(path) {
+        const callbackArray = this.queue[path];
+        if (callbackArray) {
+            callbackArray.forEach(item => {
+                const { paths, callback } = item;
+                callback(...paths.map(path => this.getDataByPath(path)))
+            })
+        }
+    }
+
+    //外部根据path更改值的方法
     publish(path, value) {
         console.log(`[publish] ${path}=${value}`);
         this.setDataByPath(path, value);
@@ -90,61 +101,76 @@ class Event {
         this.notify(path);
         this.updateFormdata(this.dependencyQueue[path]);
     }
-    notify(path) {
-        const callbacks = this.queue[path];
-        if (callbacks) {
-            callbacks.forEach(callback => {
-                callback(this.getDataByPath(path));
-            })
-        }
-    }
-    subscribe(path, callback) {
-        if (!this.queue[path]) {
-            this.queue[path] = [];
-        }
-        this.queue[path].push(callback);
+    //外部根据path订阅值更新的方法
+    subscribe(paths, callback) {
+        paths.forEach(path => {
+            if (!this.queue[path]) {
+                this.queue[path] = [];
+            }
+            this.queue[path].push({ callback, paths });
+        })
+
         // console.log(this.queue);
     }
 }
 
-const e = new Event({
-    schema: {
-        "type": "object",
-        "properties": {
-            "first name": {
-                "type": "string"
-            },
-            "last name": {
-                "type": "string"
-            },
-            "name": {
-                "type": "string",
-                "custom-denpendency": {
-                    "denpendencies": ["root.first name","root.last name"],
-                    "value": "$deps[1]+$deps[0]"
-                }
-            },
-            "birthday": {
-                "type": "number"
-            },
-            "age": {
-                "type": "number",
-                "custom-denpendency": {
-                    "denpendencies": ["root.birthday"],
-                    "value": "new Date().getFullYear()-$deps[0]"
-                }
-            }
-        }
-    },
-    formdata: {
-        "first name": "z",
-        "last name": "t",
-        "birthday": 1998
+let getEvent = (function () {
+    let _instance = null;
+    return (props) => {
+        if (_instance) return _instance;
+        const { schema, formdata } = props;
+        _instance = new XEvent({ schema, formdata });
+        return _instance;
     }
-})
+})()
 
-e.subscribe("root.age", (value) => {
-    console.log(`[subscribe] root.age=${value}`)
-})
+export { getEvent }
 
-e.publish("root.birthday", 1997)
+
+// const e = getEvent({
+//     schema: {
+//         "type": "object",
+//         "properties": {
+//             "first name": {
+//                 "type": "string"
+//             },
+//             "last name": {
+//                 "type": "string"
+//             },
+//             "name": {
+//                 "type": "string",
+//                 "custom-denpendency": {
+//                     "denpendencies": ["root.first name", "root.last name"],
+//                     "value": "$deps[1]+' '+$deps[0]"
+//                 }
+//             },
+//             "birthday": {
+//                 "type": "number"
+//             },
+//             "age": {
+//                 "type": "number",
+//                 "custom-denpendency": {
+//                     "denpendencies": ["root.birthday"],
+//                     "value": "new Date().getFullYear()-$deps[0]"
+//                 }
+//             }
+//         }
+//     },
+//     formdata: {
+//         "first name": "z",
+//         "last name": "t",
+//         "birthday": 1998
+//     }
+// })
+
+
+// e.subscribe(["root.age"], (age) => {
+//     console.log(`[subscribe] root.age=${age}`)
+// })
+
+// e.subscribe(["root.name"], (name) => {
+//     console.log(`[subscribe] root.name=${name}`)
+// })
+
+// e.publish("root.birthday",1997)
+// e.publish("root.first name","zheng")

@@ -3,6 +3,7 @@ import CheckboxWidget from "./CheckboxWidget";
 import RadioWidget from "./RadioWidget";
 import TextareaWidget from "./TextareaWidget";
 import ArrayTableWidget from "./ArrayTable";
+import NumberInputWidget from "./NumberInputWidget";
 
 export {
     StringInputWidget,
@@ -10,4 +11,5 @@ export {
     RadioWidget,
     TextareaWidget,
     ArrayTableWidget,
+    NumberInputWidget,
 }
