@@ -8,7 +8,7 @@ class Event {
         this.constructDependencyQueue(schema, "root");
         this.initialFormdata()
 
-        console.log(this.formdata);
+        // console.log(this.formdata,this.dependencyQueue);
     }
     constructDependencyQueue(schema, path) {
         const { type } = schema;
@@ -30,7 +30,8 @@ class Event {
                     this.dependencyQueue[d].push({
                         ...denpendency,
                         target: path,
-                        callback: new Function(`return ${value.replace(/\$deps/g, 'arguments')}`),
+                        callback: new Function(`
+                        return ${value.replace(/\$deps/g, 'arguments')}`),
                     })
                 })
             }
@@ -45,12 +46,12 @@ class Event {
     updateFormdata(denpendenciesToSource) {
         denpendenciesToSource.forEach(denpendency => {
             const { denpendencies, target, callback } = denpendency;
-            const value = callback(...denpendencies.map(d => this.getDataFromPath(d)))
-            this.setDataToPath(target, value);
+            const value = callback(...denpendencies.map(d => this.getDataByPath(d)))
+            this.setDataByPath(target, value);
             this.notify(target);
         })
     }
-    setDataToPath(path = "root", value) {
+    setDataByPath(path = "root", value) {
         const paths = path.split(".");
         if (paths.length === 1) this.formdata = value;
         this.formdata = this.formdata ? this.formdata : {};
@@ -68,7 +69,7 @@ class Event {
             }
         }
     }
-    getDataFromPath(path) {
+    getDataByPath(path) {
         const paths = path.split(".");
         if (paths.length === 1) return this.formdata;
         let temp = this.formdata;
@@ -83,16 +84,19 @@ class Event {
         }
     }
     publish(path, value) {
-        console.log(`[publish] ${path}=${value}`)
-        this.setDataToPath(path, value);
+        console.log(`[publish] ${path}=${value}`);
+        this.setDataByPath(path, value);
         // console.log(this.formdata);
+        this.notify(path);
+        this.updateFormdata(this.dependencyQueue[path]);
+    }
+    notify(path) {
         const callbacks = this.queue[path];
         if (callbacks) {
             callbacks.forEach(callback => {
-                callback(this.getDataFromPath(path))
+                callback(this.getDataByPath(path));
             })
         }
-        this.updateFormdata(this.dependencyQueue[path])
     }
     subscribe(path, callback) {
         if (!this.queue[path]) {
@@ -100,14 +104,6 @@ class Event {
         }
         this.queue[path].push(callback);
         // console.log(this.queue);
-    }
-    notify(path) {
-        const callbacks = this.queue[path];
-        if (callbacks) {
-            callbacks.forEach(callback => {
-                callback(this.getDataFromPath(path))
-            })
-        }
     }
 }
 
@@ -122,7 +118,11 @@ const e = new Event({
                 "type": "string"
             },
             "name": {
-                "type": "string"
+                "type": "string",
+                "custom-denpendency": {
+                    "denpendencies": ["root.first name","root.last name"],
+                    "value": "$deps[1]+$deps[0]"
+                }
             },
             "birthday": {
                 "type": "number"
@@ -131,7 +131,7 @@ const e = new Event({
                 "type": "number",
                 "custom-denpendency": {
                     "denpendencies": ["root.birthday"],
-                    "value": "new Date(Date.now()).getFullYear()-$deps[0]"
+                    "value": "new Date().getFullYear()-$deps[0]"
                 }
             }
         }
@@ -144,12 +144,7 @@ const e = new Event({
 })
 
 e.subscribe("root.age", (value) => {
-    console.log(`[subscribe]root.age=${value}`)
+    console.log(`[subscribe] root.age=${value}`)
 })
 
 e.publish("root.birthday", 1997)
-
-// const functionStr='2022-$deps[0]';
-// const func=new Function(`return ${functionStr.replace(/\$deps/g,'arguments')}`)
-
-// console.log(func(1))
