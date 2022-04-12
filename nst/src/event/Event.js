@@ -5,8 +5,50 @@ class Event {
         this.formdata = formdata;
         this.queue = {};
         this.dependencyQueue = {};
+        this.constructDependencyQueue(schema, "root");
+        this.initialFormdata()
 
-        console.log(this.schema, this.formdata);
+        console.log(this.formdata);
+    }
+    constructDependencyQueue(schema, path) {
+        const { type } = schema;
+        if (type === "object") {
+            const properties = schema["properties"];
+            const childrenKeys = Object.keys(properties)
+            childrenKeys.forEach(key => {
+                this.constructDependencyQueue(properties[key], `root.${key}`)
+            })
+        } else if (type !== "array") {
+            // console.log(schema, path)
+            const denpendency = schema["custom-denpendency"];
+            if (denpendency) {
+                const { denpendencies, value } = denpendency;
+                denpendencies.forEach(d => {
+                    if (!this.dependencyQueue[d]) {
+                        this.dependencyQueue[d] = [];
+                    }
+                    this.dependencyQueue[d].push({
+                        ...denpendency,
+                        target: path,
+                        callback: new Function(`return ${value.replace(/\$deps/g, 'arguments')}`),
+                    })
+                })
+            }
+        }
+    }
+    initialFormdata() {
+        const queue = this.dependencyQueue;
+        for (let key in queue) {
+            this.updateFormdata(queue[key]);
+        }
+    }
+    updateFormdata(denpendenciesToSource) {
+        denpendenciesToSource.forEach(denpendency => {
+            const { denpendencies, target, callback } = denpendency;
+            const value = callback(...denpendencies.map(d => this.getDataFromPath(d)))
+            this.setDataToPath(target, value);
+            this.notify(target);
+        })
     }
     setDataToPath(path = "root", value) {
         const paths = path.split(".");
@@ -41,21 +83,31 @@ class Event {
         }
     }
     publish(path, value) {
+        console.log(`[publish] ${path}=${value}`)
         this.setDataToPath(path, value);
-        console.log(this.formdata);
+        // console.log(this.formdata);
         const callbacks = this.queue[path];
         if (callbacks) {
             callbacks.forEach(callback => {
                 callback(this.getDataFromPath(path))
             })
         }
+        this.updateFormdata(this.dependencyQueue[path])
     }
     subscribe(path, callback) {
         if (!this.queue[path]) {
             this.queue[path] = [];
         }
         this.queue[path].push(callback);
-        console.log(this.queue);
+        // console.log(this.queue);
+    }
+    notify(path) {
+        const callbacks = this.queue[path];
+        if (callbacks) {
+            callbacks.forEach(callback => {
+                callback(this.getDataFromPath(path))
+            })
+        }
     }
 }
 
@@ -79,7 +131,7 @@ const e = new Event({
                 "type": "number",
                 "custom-denpendency": {
                     "denpendencies": ["root.birthday"],
-                    "value": "2022-$deps[0]"
+                    "value": "new Date(Date.now()).getFullYear()-$deps[0]"
                 }
             }
         }
@@ -91,8 +143,13 @@ const e = new Event({
     }
 })
 
-e.subscribe("root.name", (value) => {
-    console.log(`root.name=${value}`)
+e.subscribe("root.age", (value) => {
+    console.log(`[subscribe]root.age=${value}`)
 })
 
-e.publish("root.name", "aa")
+e.publish("root.birthday", 1997)
+
+// const functionStr='2022-$deps[0]';
+// const func=new Function(`return ${functionStr.replace(/\$deps/g,'arguments')}`)
+
+// console.log(func(1))
