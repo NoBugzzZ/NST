@@ -1,6 +1,7 @@
 import React from "react";
 import "./index.css"
 import { getRegister, setDataToPath } from "./utils";
+import { getEvent } from "../../event/Event";
 
 export default class JSONSchemaForm extends React.Component {
   constructor(props) {
@@ -15,13 +16,17 @@ export default class JSONSchemaForm extends React.Component {
   }
 
   setFormdata(path, value) {
-    this.formdata = setDataToPath(this.formdata, path, value);
-    // console.log(this.formdata);
+    // this.formdata = setDataToPath(this.formdata, path, value);
+    console.log(path, value);
   }
 
   render() {
     console.log("JSONSchemaForm render", this.props);
-    this.formdata = this.props.formdata ? this.props.formdata : undefined;
+    // this.formdata = this.props.formdata ? this.props.formdata : undefined;
+    this.cusEvent = this.props.schema&&this.props.formdata?getEvent({
+      schema: this.props.schema,
+      formdata: this.props.formdata
+    }):null;
     const SchemaField = this.register.field.SchemaField;
     return (
       <>
@@ -39,7 +44,7 @@ export default class JSONSchemaForm extends React.Component {
             >
               <button
                 onClick={() => {
-                  alert(JSON.stringify(this.formdata));
+                  alert(JSON.stringify(this.cusEvent.formdata));
                 }}
               >Submit</button>
             </div>

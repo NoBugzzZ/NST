@@ -542,7 +542,7 @@ const forms = {
         "type": "string",
         "component":"StringInputWidget",
         "custom-denpendency": {
-          "denpendencies": ["root.first name", "root.last name"],
+          "denpendencies": ["root.firstname", "root.lastname"],
           "value": "$deps[1]+' '+$deps[0]"
         }
       },
