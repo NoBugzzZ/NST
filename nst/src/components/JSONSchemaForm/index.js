@@ -7,12 +7,34 @@ export default class JSONSchemaForm extends React.Component {
   constructor(props) {
     super(props);
     this.register = getRegister();
+    this.state = {};
   }
 
-  getDefaultState({ schema }) {
-    const defaultState = {};
-    defaultState.schema = schema ? schema : null;
-    return defaultState;
+  static getDerivedStateFromProps(props, state) {
+    console.log(`[getDerivedStateFromProps] `, props, state);
+    return null;
+  }
+
+  componentDidMount() {
+    console.log(`[componentDidMount]`);
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    console.log(`[shouldComponentUpdate]`, nextProps, nextState);
+    return true;
+  }
+
+  getSnapshotBeforeUpdate(prevProps, prevState) {
+    console.log(`[getSnapshotBeforeUpdate]`, prevProps, prevState);
+    return null;
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    console.log(`[componentDidUpdate]`, prevProps, prevState, snapshot);
+  }
+
+  componentWillUnmount() {
+    console.log(`[componentWillUnmount]`)
   }
 
   setFormdata(path, value) {
@@ -23,10 +45,10 @@ export default class JSONSchemaForm extends React.Component {
   render() {
     console.log("JSONSchemaForm render", this.props);
     // this.formdata = this.props.formdata ? this.props.formdata : undefined;
-    this.cusEvent = this.props.schema&&this.props.formdata?getEvent({
+    this.cusEvent = this.props.schema && this.props.formdata ? getEvent({
       schema: this.props.schema,
       formdata: this.props.formdata
-    }):null;
+    }) : null;
     const SchemaField = this.register.field.SchemaField;
     return (
       <>

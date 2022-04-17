@@ -38,8 +38,7 @@ class XEvent {
                             {
                                 ...denpendency,
                                 target: path,
-                                callback: new Function(`
-                                return ${value.replace(/\$deps/g, 'arguments')}`),
+                                callback: new Function(`return ${value.replace(/\$deps/g, 'arguments')}`),
                             }
                         ],
                     }
@@ -202,61 +201,61 @@ let getEvent = (function () {
     }
 })()
 
-// export { getEvent }
+export { getEvent }
 
 
-const e = getEvent({
-    schema: {
-        "type": "object",
-        "properties": {
-            "firstname": {
-                "type": "string"
-            },
-            "lastname": {
-                "type": "string"
-            },
-            "name": {
-                "type": "string",
-                "custom-denpendency": {
-                    "denpendencies": ["root.firstname", "root.lastname"],
-                    "value": "$deps[1]+' '+$deps[0]"
-                }
-            },
-            "birthday": {
-                "type": "number"
-            },
-            "age": {
-                "type": "number",
-                "custom-denpendency": {
-                    "denpendencies": ["root.birthday"],
-                    "value": "new Date().getFullYear()-$deps[0]"
-                }
-            },
-            "test1": {
-                "type": "string"
-            },
-            "test2": {
-                "type": "string",
-                "custom-denpendency": {
-                    "denpendencies": ["root.test1"],
-                    "value": "'test2+'+$deps[0]"
-                }
-            },
-            "test3": {
-                "type": "string",
-                "custom-denpendency": {
-                    "denpendencies": ["root.test1", "root.test2"],
-                    "value": "$deps[0]+' '+$deps[1]"
-                }
-            },
-        }
-    },
-    formdata: {
-        "firstname": "z",
-        "lastname": "t",
-        "birthday": 1998
-    }
-})
+// const e = getEvent({
+//     schema: {
+//         "type": "object",
+//         "properties": {
+//             "firstname": {
+//                 "type": "string"
+//             },
+//             "lastname": {
+//                 "type": "string"
+//             },
+//             "name": {
+//                 "type": "string",
+//                 "custom-denpendency": {
+//                     "denpendencies": ["root.firstname", "root.lastname"],
+//                     "value": "$deps[1]+' '+$deps[0]"
+//                 }
+//             },
+//             "birthday": {
+//                 "type": "number"
+//             },
+//             "age": {
+//                 "type": "number",
+//                 "custom-denpendency": {
+//                     "denpendencies": ["root.birthday"],
+//                     "value": "new Date().getFullYear()-$deps[0]"
+//                 }
+//             },
+//             "test1": {
+//                 "type": "string"
+//             },
+//             "test2": {
+//                 "type": "string",
+//                 "custom-denpendency": {
+//                     "denpendencies": ["root.test1"],
+//                     "value": "'test2+'+$deps[0]"
+//                 }
+//             },
+//             "test3": {
+//                 "type": "string",
+//                 "custom-denpendency": {
+//                     "denpendencies": ["root.test1", "root.test2"],
+//                     "value": "$deps[0]+' '+$deps[1]"
+//                 }
+//             },
+//         }
+//     },
+//     formdata: {
+//         "firstname": "z",
+//         "lastname": "t",
+//         "birthday": 1998
+//     }
+// })
 
 
 // e.subscribe(["root.age"], (age) => {
