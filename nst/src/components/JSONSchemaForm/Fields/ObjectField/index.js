@@ -13,7 +13,7 @@ export default class ObjectField extends React.PureComponent {
   // }
 
   render() {
-    console.log("ObjectField render");
+    console.log(`[render]`,this.props.path);
     const title = this.props.schema.title ?
       this.props.schema.title :
       getDefaultTitle(this.props.path);

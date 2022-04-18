@@ -12,7 +12,7 @@ export default class ArrayField extends React.PureComponent {
     //     this.title=this.schema.title?this.schema.title:getDefaultTitle(this.path);
     // }
     render() {
-        console.log("ArrayField render");
+        console.log(`[render]`,this.props.path);
         // console.log(this.schema,this.formdata,this.path,this.title)
         const { component } = this.props.schema;
         const Widget = this.props.register.widget[component];

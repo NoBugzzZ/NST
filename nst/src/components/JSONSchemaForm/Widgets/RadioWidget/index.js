@@ -11,7 +11,7 @@ export default class RadioWidget extends React.PureComponent {
         this.state = { formdata: this.formdata ? this.formdata : '' };
     }
     render() {
-        console.log("RadioWidget render");
+        // console.log("RadioWidget render");
         return (
             <div>
                 {/* <p>{this.title}</p> */}

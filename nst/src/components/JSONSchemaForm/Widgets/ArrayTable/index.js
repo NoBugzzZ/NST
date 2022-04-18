@@ -111,7 +111,7 @@ export default class ArrayTableWidget extends React.PureComponent {
         return Body;
     }
     render() {
-        console.log("ArrayTableWidget render");
+        // console.log("ArrayTableWidget render");
         // console.log(this.props.schema, this.state);
         return (
             <div

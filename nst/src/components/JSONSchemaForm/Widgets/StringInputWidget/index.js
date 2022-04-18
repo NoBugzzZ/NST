@@ -11,7 +11,7 @@ export default class StringInputWidget extends React.PureComponent {
   //   // this.title=this.props.title;
   // }
   render() {
-    console.log("StringInputWidget render");
+    // console.log("StringInputWidget render");
     // console.log(this.schema,this.formdata,this.path);
     return (
       <div>

@@ -11,7 +11,7 @@ export default class TextareaWidget extends React.PureComponent {
     //     // this.title = this.props.title;
     // }
     render() {
-        console.log("TextareaWidget render");
+        // console.log("TextareaWidget render");
         return (
             <div>
                 {/* <p>{this.title}</p> */}

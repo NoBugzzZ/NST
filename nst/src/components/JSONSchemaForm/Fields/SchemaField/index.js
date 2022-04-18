@@ -36,7 +36,6 @@ export default class SchemaField extends React.PureComponent {
     )
   }
   render() {
-    console.log("SchemaField render");
     return (
       <>
         {

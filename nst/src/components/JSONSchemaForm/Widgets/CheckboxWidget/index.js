@@ -10,7 +10,7 @@ export default class CheckboxWidget extends React.PureComponent {
         this.state = this.formdata ? {formdata:this.formdata} : {formdata:[]};
     }
     render() {
-        console.log("CheckboxWidget render");
+        // console.log("CheckboxWidget render");
         // console.log(this.props.schema)
         return (
             <div>

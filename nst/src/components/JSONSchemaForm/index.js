@@ -43,12 +43,8 @@ export default class JSONSchemaForm extends React.Component {
   }
 
   render() {
-    console.log("JSONSchemaForm render", this.props);
+    console.log(`[render] root`, this.props);
     // this.formdata = this.props.formdata ? this.props.formdata : undefined;
-    this.cusEvent = this.props.schema && this.props.formdata ? getEvent({
-      schema: this.props.schema,
-      formdata: this.props.formdata
-    }) : null;
     const SchemaField = this.register.field.SchemaField;
     return (
       <>

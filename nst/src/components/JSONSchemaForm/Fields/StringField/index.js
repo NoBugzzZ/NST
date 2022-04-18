@@ -12,7 +12,7 @@ export default class StringField extends React.PureComponent {
   //   this.title = this.schema.title ? this.schema.title : getDefaultTitle(this.path);
   // }
   render() {
-    console.log("StringField render")
+    console.log(`[render]`,this.props.path);
     const { component } = this.props.schema;
     const Widget = this.props.register.widget[component];
     const title = this.props.schema.title ?

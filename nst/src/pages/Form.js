@@ -10,8 +10,8 @@ export default function Form() {
   useEffect(() => {
     console.log(`form/${params.formId}`)
     getForm(params.formId).then(data => {
-      setSchema(data);
       getFormdata(params.formId).then(formdata => {
+        setSchema(data);
         setFormdata(formdata);
       })
 
