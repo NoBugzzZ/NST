@@ -527,36 +527,50 @@ const forms = {
     }
   },
   "test": {
-    "type": "object",
-    "title":"test",
-    "properties": {
-      "firstname": {
-        "type": "string",
-        "component":"StringInputWidget"
-      },
-      "lastname": {
-        "type": "string",
-        "component":"StringInputWidget"
-      },
-      "name": {
-        "type": "string",
-        "component":"StringInputWidget",
-        "custom-denpendency": {
-          "denpendencies": ["root.firstname", "root.lastname"],
-          "value": "$deps[1]+' '+$deps[0]"
+    "schema":{
+      "type": "object",
+      "title":"test",
+      "properties": {
+        "firstname": {
+          "type": "string"
+        },
+        "lastname": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string",
+          "custom-denpendency": {
+            "denpendencies": ["root.firstname", "root.lastname"],
+            "value": "$deps[1]+' '+$deps[0]"
+          }
+        },
+        "birthday": {
+          "type": "number"
+        },
+        "age": {
+          "type": "number",
+          "custom-denpendency": {
+            "denpendencies": ["root.birthday"],
+            "value": "new Date().getFullYear()-$deps[0]"
+          }
         }
+      }
+    },
+    "uischema":{
+      "firstname":{
+        "component":"StringInputWidget"
       },
-      "birthday": {
-        "type": "string",
+      "lastname":{
+        "component":"StringInputWidget"
+      },
+      "name":{
+        "component":"StringInputWidget"
+      },
+      "birthday":{
         "component":"NumberInputWidget"
       },
-      "age": {
-        "type": "string",
-        "component":"NumberInputWidget",
-        "custom-denpendency": {
-          "denpendencies": ["root.birthday"],
-          "value": "new Date().getFullYear()-$deps[0]"
-        }
+      "age":{
+        "component":"NumberInputWidget"
       }
     }
   }

@@ -3,6 +3,7 @@ import {
   ObjectField,
   StringField,
   ArrayField,
+  NumberField,
 } from "../Fields";
 import {
   StringInputWidget,
@@ -20,6 +21,7 @@ export function getRegister() {
       ObjectField,
       StringField,
       ArrayField,
+      NumberField,
     },
     widget: {
       StringInputWidget,

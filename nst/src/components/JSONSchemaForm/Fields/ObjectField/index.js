@@ -1,7 +1,8 @@
 import React from "react";
 import { getDefaultTitle, getFontSize } from "../../utils";
+// import { getEvent } from "../../../../event/Event";
 
-export default class ObjectField extends React.PureComponent {
+export default class ObjectField extends React.Component {
   // constructor(props) {
   //   super(props);
   //   this.schema = this.props.schema;
@@ -13,7 +14,8 @@ export default class ObjectField extends React.PureComponent {
   // }
 
   render() {
-    console.log(`[render]`,this.props.path);
+    // this.cusEvent = getEvent();
+    console.log(`[render]`, this.props.path);
     const title = this.props.schema.title ?
       this.props.schema.title :
       getDefaultTitle(this.props.path);
@@ -22,8 +24,8 @@ export default class ObjectField extends React.PureComponent {
       <div>
         <p
           style={{
-            fontWeight:"bold",
-            fontSize:`${fontSize}px`,
+            fontWeight: "bold",
+            fontSize: `${fontSize}px`,
           }}
         >{title}</p>
         <hr />
@@ -34,10 +36,12 @@ export default class ObjectField extends React.PureComponent {
               <SchemaField
                 key={key}
                 schema={this.props.schema.properties[key]}
-                formdata={this.props.formdata ? this.props.formdata[key] : undefined}
+                uischema={this.props.uischema[key]}
+                // formdata={this.props.formdata ? this.props.formdata[key] : undefined}
                 register={this.props.register}
+                cusevent={this.props.cusevent}
                 path={`${this.props.path}.${key}`}
-                setFormdata={this.props.setFormdata}
+                // setFormdata={this.props.setFormdata}
               />
             )
           })

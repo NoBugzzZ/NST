@@ -1,9 +1,9 @@
 import React from "react";
 import "./index.css"
-import { getRegister, setDataToPath } from "./utils";
+import { getRegister } from "./utils";
 import { getEvent } from "../../event/Event";
 
-export default class JSONSchemaForm extends React.Component {
+export default class JSONSchemaForm extends React.PureComponent {
   constructor(props) {
     super(props);
     this.register = getRegister();
@@ -19,10 +19,10 @@ export default class JSONSchemaForm extends React.Component {
     console.log(`[componentDidMount]`);
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    console.log(`[shouldComponentUpdate]`, nextProps, nextState);
-    return true;
-  }
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   console.log(`[shouldComponentUpdate]`, nextProps, nextState);
+  //   return true;
+  // }
 
   getSnapshotBeforeUpdate(prevProps, prevState) {
     console.log(`[getSnapshotBeforeUpdate]`, prevProps, prevState);
@@ -43,6 +43,10 @@ export default class JSONSchemaForm extends React.Component {
   }
 
   render() {
+    this.cusevent=getEvent({
+      schema:this.props.schema,
+      formdata:this.props.formdata
+    });
     console.log(`[render] root`, this.props);
     // this.formdata = this.props.formdata ? this.props.formdata : undefined;
     const SchemaField = this.register.field.SchemaField;
@@ -52,17 +56,19 @@ export default class JSONSchemaForm extends React.Component {
           <div>
             <SchemaField
               schema={this.props.schema}
-              formdata={this.formdata}
+              uischema={this.props.uischema}
+              // formdata={this.formdata}
               register={this.register}
+              cusevent={this.cusevent}
               path="root"
-              setFormdata={this.setFormdata.bind(this)}
+              // setFormdata={this.setFormdata.bind(this)}
             />
             <div
               className="form-submit"
             >
               <button
                 onClick={() => {
-                  alert(JSON.stringify(this.cusEvent.formdata));
+                  alert(JSON.stringify(this.cusevent.formdata));
                 }}
               >Submit</button>
             </div>

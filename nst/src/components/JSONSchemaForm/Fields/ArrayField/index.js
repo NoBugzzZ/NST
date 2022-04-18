@@ -1,7 +1,8 @@
 import React from "react";
 import { getDefaultTitle, getFontSize } from "../../utils";
+import { getEvent } from "../../../../event/Event";
 
-export default class ArrayField extends React.PureComponent {
+export default class ArrayField extends React.Component {
     // constructor(props) {
     //     super(props);
     //     this.schema = this.props.schema;
@@ -12,9 +13,10 @@ export default class ArrayField extends React.PureComponent {
     //     this.title=this.schema.title?this.schema.title:getDefaultTitle(this.path);
     // }
     render() {
+        this.cusEvent=getEvent();
         console.log(`[render]`,this.props.path);
         // console.log(this.schema,this.formdata,this.path,this.title)
-        const { component } = this.props.schema;
+        const { component } = this.props.uischema;
         const Widget = this.props.register.widget[component];
         const title = this.props.schema.title ?
             this.props.schema.title :
@@ -31,9 +33,10 @@ export default class ArrayField extends React.PureComponent {
                 <hr />
                 <Widget
                     schema={this.props.schema.items}
-                    formdata={this.props.formdata}
+                    uischema={this.props.uischema["items"]}
+                    // formdata={this.props.formdata}
                     path={this.props.path}
-                    setFormdata={this.props.setFormdata}
+                    // setFormdata={this.props.setFormdata}
                     register={this.props.register}
                 />
             </div>

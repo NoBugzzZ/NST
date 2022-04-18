@@ -2,7 +2,7 @@ class XEvent {
     constructor(props) {
         const { schema, formdata } = props;
         this.schema = schema;
-        this.formdata = formdata;
+        this.formdata = formdata ? formdata : {};
         this.queue = {};
         this.dependencyGraph = {};
         this.constructdependencyGraph(schema, "root");
@@ -113,6 +113,7 @@ class XEvent {
         queue.splice(index, 0, successor);
     }
     getSuccessors(successors, queue) {
+        // console.log(successors)
         successors.forEach(successor => {
             this.insertByTopologicalOrder(successor, queue);
             this.getSuccessors(this.dependencyGraph[successor.target].successors, queue);
@@ -123,9 +124,19 @@ class XEvent {
         this.getSuccessors(successors, queue);
         queue.forEach(denpendency => {
             const { denpendencies, target, callback } = denpendency;
-            const value = callback(...denpendencies.map(d => this.getDataByPath(d)))
-            this.setDataByPath(target, value);
-            this.notify(target);
+            const deps = denpendencies.map(d => this.getDataByPath(d));
+            let flag = true;
+            for (let d of deps) {
+                if (d === null || d === undefined) {
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag) {
+                const value = callback(...denpendencies.map(d => this.getDataByPath(d)))
+                this.setDataByPath(target, value);
+                this.notify(target);
+            }
         })
     }
     setDataByPath(path = "root", value) {
@@ -194,77 +205,79 @@ class XEvent {
 let getEvent = (function () {
     let _instance = null;
     return (props) => {
-        if (_instance) return _instance;
-        const { schema, formdata } = props;
+        // console.log("[event]", props)
+        if (!props) return _instance;
+        const { schema, formdata } = props
+        if (!schema) return _instance;
         _instance = new XEvent({ schema, formdata });
         return _instance;
     }
 })()
 
-export { getEvent }
+// export { XEvent, getEvent }
 
 
-// const e = getEvent({
-//     schema: {
-//         "type": "object",
-//         "properties": {
-//             "firstname": {
-//                 "type": "string"
-//             },
-//             "lastname": {
-//                 "type": "string"
-//             },
-//             "name": {
-//                 "type": "string",
-//                 "custom-denpendency": {
-//                     "denpendencies": ["root.firstname", "root.lastname"],
-//                     "value": "$deps[1]+' '+$deps[0]"
-//                 }
-//             },
-//             "birthday": {
-//                 "type": "number"
-//             },
-//             "age": {
-//                 "type": "number",
-//                 "custom-denpendency": {
-//                     "denpendencies": ["root.birthday"],
-//                     "value": "new Date().getFullYear()-$deps[0]"
-//                 }
-//             },
-//             "test1": {
-//                 "type": "string"
-//             },
-//             "test2": {
-//                 "type": "string",
-//                 "custom-denpendency": {
-//                     "denpendencies": ["root.test1"],
-//                     "value": "'test2+'+$deps[0]"
-//                 }
-//             },
-//             "test3": {
-//                 "type": "string",
-//                 "custom-denpendency": {
-//                     "denpendencies": ["root.test1", "root.test2"],
-//                     "value": "$deps[0]+' '+$deps[1]"
-//                 }
-//             },
-//         }
-//     },
-//     formdata: {
-//         "firstname": "z",
-//         "lastname": "t",
-//         "birthday": 1998
-//     }
-// })
+const e = getEvent({
+    schema: {
+        "type": "object",
+        "properties": {
+            "firstname": {
+                "type": "string"
+            },
+            "lastname": {
+                "type": "string"
+            },
+            "name": {
+                "type": "string",
+                "custom-denpendency": {
+                    "denpendencies": ["root.firstname", "root.lastname"],
+                    "value": "$deps[1]+' '+$deps[0]"
+                }
+            },
+            "birthday": {
+                "type": "number"
+            },
+            "age": {
+                "type": "number",
+                "custom-denpendency": {
+                    "denpendencies": ["root.birthday"],
+                    "value": "new Date().getFullYear()-$deps[0]"
+                }
+            },
+            "test1": {
+                "type": "string"
+            },
+            "test2": {
+                "type": "string",
+                "custom-denpendency": {
+                    "denpendencies": ["root.test1"],
+                    "value": "'test2+'+$deps[0]"
+                }
+            },
+            "test3": {
+                "type": "string",
+                "custom-denpendency": {
+                    "denpendencies": ["root.test1", "root.test2"],
+                    "value": "$deps[0]+' '+$deps[1]"
+                }
+            },
+        }
+    },
+    formdata: {
+        "firstname": "z",
+        "lastname": "t",
+        "birthday": 1998
+    }
+})
 
 
-// e.subscribe(["root.age"], (age) => {
-//     console.log(`[subscribe] root.age=${age}`)
-// })
+e.subscribe(["root.age"], (age) => {
+    console.log(`[subscribe] root.age=${age}`)
+})
 
-// e.subscribe(["root.name"], (name) => {
-//     console.log(`[subscribe] root.name=${name}`)
-// })
+e.subscribe(["root.name"], (name) => {
+    console.log(`[subscribe] root.name=${name}`)
+})
 
-// e.publish("root.birthday", 1997)
-// e.publish("root.firstname", "zheng")
+e.publish("root.birthday", 1997)
+e.publish("root.firstname", "zheng")

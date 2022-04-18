@@ -4,15 +4,17 @@ import { Paper, JSONSchemaForm } from "../components"
 import { getForm, getFormdata } from "../requests"
 
 export default function Form() {
-  const [schema, setSchema] = useState(null);
-  const [formdata, setFormdata] = useState(null);
+  const [data, setData] = useState(null);
   let params = useParams();
   useEffect(() => {
     console.log(`form/${params.formId}`)
-    getForm(params.formId).then(data => {
+    getForm(params.formId).then((schema) => {
       getFormdata(params.formId).then(formdata => {
-        setSchema(data);
-        setFormdata(formdata);
+        setData({
+          schema:schema.schema,
+          uischema:schema.uischema,
+          formdata
+        });
       })
 
     })
@@ -20,7 +22,10 @@ export default function Form() {
   return (
     <Paper>
       {/* {JSON.stringify(schema)} */}
-      <JSONSchemaForm schema={schema} formdata={formdata}/>
+      <JSONSchemaForm
+        schema={data?.schema}
+        uischema={data?.uischema}
+        formdata={data?.formdata} />
     </Paper>
   )
 }
