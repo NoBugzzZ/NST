@@ -11,9 +11,12 @@ async function getFormdata(id) {
 export { getFormdata }
 
 const formdatas = {
-    "test": {
+    "test1": {
         "firstname": "z",
         "lastname": "t",
         "birthday": 1998
+    },
+    "test2": {
+        "test1": "11",
     }
 }

@@ -1,6 +1,6 @@
 import React from "react";
 import { getDefaultTitle } from "../../utils";
-import { getEvent } from "../../../../event/Event";
+// import { getEvent } from "../../../../event/Event";
 
 export default class NullField extends React.Component {
   render() {

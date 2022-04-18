@@ -526,10 +526,10 @@ const forms = {
       }
     }
   },
-  "test": {
-    "schema":{
+  "test1": {
+    "schema": {
       "type": "object",
-      "title":"test",
+      "title": "test",
       "properties": {
         "firstname": {
           "type": "string"
@@ -553,24 +553,82 @@ const forms = {
             "denpendencies": ["root.birthday"],
             "value": "new Date().getFullYear()-$deps[0]"
           }
+        },
+        "hobby": {
+          "type": "string",
+          "enum": [
+            "电影",
+            "无"
+          ]
+        },
+        "hobbydetail": {
+          "type": "string"
         }
       }
     },
-    "uischema":{
-      "firstname":{
-        "component":"StringInputWidget"
+    "uischema": {
+      "firstname": {
+        "component": "StringInputWidget"
       },
-      "lastname":{
-        "component":"StringInputWidget"
+      "lastname": {
+        "component": "StringInputWidget"
       },
-      "name":{
-        "component":"StringInputWidget"
+      "name": {
+        "component": "StringInputWidget"
       },
-      "birthday":{
-        "component":"NumberInputWidget"
+      "birthday": {
+        "component": "NumberInputWidget"
       },
-      "age":{
-        "component":"NumberInputWidget"
+      "age": {
+        "component": "NumberInputWidget"
+      },
+      "hobby": {
+        "component": "SelectWidget"
+      },
+      "hobbydetail": {
+        "component": "TextareaWidget",
+        "custom-denpendency": {
+          "denpendencies": ["root.hobby"],
+          "style": {
+            "display":"$deps[0]==='无'?'none':''"
+          }
+        }
+      }
+    }
+  },
+  "test2": {
+    "schema": {
+      "type": "object",
+      "title": "test",
+      "properties": {
+        "test1": {
+          "type": "string"
+        },
+        "test2": {
+          "type": "string",
+          "custom-denpendency": {
+            "denpendencies": ["root.test1"],
+            "value": "'test2+'+$deps[0]"
+          }
+        },
+        "test3": {
+          "type": "string",
+          "custom-denpendency": {
+            "denpendencies": ["root.test1", "root.test2"],
+            "value": "$deps[0]+' '+$deps[1]"
+          }
+        }
+      }
+    },
+    "uischema": {
+      "test1": {
+        "component": "StringInputWidget"
+      },
+      "test2": {
+        "component": "StringInputWidget"
+      },
+      "test3": {
+        "component": "StringInputWidget"
       }
     }
   }

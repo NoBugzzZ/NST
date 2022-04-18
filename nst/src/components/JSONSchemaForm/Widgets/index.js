@@ -4,6 +4,7 @@ import RadioWidget from "./RadioWidget";
 import TextareaWidget from "./TextareaWidget";
 import ArrayTableWidget from "./ArrayTable";
 import NumberInputWidget from "./NumberInputWidget";
+import SelectWidget from "./SelectWidget";
 
 export {
     StringInputWidget,
@@ -12,4 +13,5 @@ export {
     TextareaWidget,
     ArrayTableWidget,
     NumberInputWidget,
+    SelectWidget,
 }

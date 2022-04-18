@@ -20,9 +20,9 @@ export default class NumberInputWidget extends React.PureComponent {
           id={this.props.path}
           className="form-input"
           type="number"
-          defaultValue={this.props.formdata ? this.props.formdata : ''}
+          value={this.props.formdata ? this.props.formdata : ''}
           onChange={(e) => {
-            this.props.setFormdata(this.props.path, Number(e.target.value));
+            this.props.setFormdata(Number(e.target.value));
           }}
         ></input>
       </div>

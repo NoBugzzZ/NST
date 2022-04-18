@@ -12,8 +12,12 @@ const forms = [
         name: 'NST－04－JS011－2011－软件测试问题清单（电子记录）'
     },
     {
-        link: 'test',
-        name: 'test'
+        link: 'test1',
+        name: 'test1'
+    },
+    {
+        link: 'test2',
+        name: 'test2'
     },
 ];
 

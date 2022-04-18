@@ -112,12 +112,13 @@ class XEvent {
         }
         queue.splice(index, 0, successor);
     }
-    getSuccessors(successors, queue) {
+    getSuccessors(successors = [], queue) {
         // console.log(successors)
-        successors.forEach(successor => {
+        for (let successor of successors) {
+            // console.log(successor)
             this.insertByTopologicalOrder(successor, queue);
             this.getSuccessors(this.dependencyGraph[successor.target].successors, queue);
-        })
+        }
     }
     updateFormdata(successors) {
         const queue = [];
@@ -176,18 +177,20 @@ class XEvent {
         if (callbackArray) {
             callbackArray.forEach(item => {
                 const { paths, callback } = item;
-                callback(...paths.map(path => this.getDataByPath(path)))
+                callback(paths.map(path => this.getDataByPath(path)))
             })
         }
     }
 
     //外部根据path更改值的方法
     publish(path, value) {
-        console.log(`[publish] ${path}=${value}`);
+        // console.log(`[publish] ${path}=${value}`);
         this.setDataByPath(path, value);
         // console.log(this.formdata);
         this.notify(path);
-        this.updateFormdata(this.dependencyGraph[path]);
+        if (this.dependencyGraph[path]) {
+            this.updateFormdata(this.dependencyGraph[path].successors);
+        }
     }
     //外部根据path订阅值更新的方法
     subscribe(paths, callback) {
@@ -214,70 +217,70 @@ let getEvent = (function () {
     }
 })()
 
-// export { XEvent, getEvent }
+export { XEvent, getEvent }
 
 
-const e = getEvent({
-    schema: {
-        "type": "object",
-        "properties": {
-            "firstname": {
-                "type": "string"
-            },
-            "lastname": {
-                "type": "string"
-            },
-            "name": {
-                "type": "string",
-                "custom-denpendency": {
-                    "denpendencies": ["root.firstname", "root.lastname"],
-                    "value": "$deps[1]+' '+$deps[0]"
-                }
-            },
-            "birthday": {
-                "type": "number"
-            },
-            "age": {
-                "type": "number",
-                "custom-denpendency": {
-                    "denpendencies": ["root.birthday"],
-                    "value": "new Date().getFullYear()-$deps[0]"
-                }
-            },
-            "test1": {
-                "type": "string"
-            },
-            "test2": {
-                "type": "string",
-                "custom-denpendency": {
-                    "denpendencies": ["root.test1"],
-                    "value": "'test2+'+$deps[0]"
-                }
-            },
-            "test3": {
-                "type": "string",
-                "custom-denpendency": {
-                    "denpendencies": ["root.test1", "root.test2"],
-                    "value": "$deps[0]+' '+$deps[1]"
-                }
-            },
-        }
-    },
-    formdata: {
-        "firstname": "z",
-        "lastname": "t",
-        "birthday": 1998
-    }
-})
+// const e = getEvent({
+//     schema: {
+//         "type": "object",
+//         "properties": {
+//             "firstname": {
+//                 "type": "string"
+//             },
+//             "lastname": {
+//                 "type": "string"
+//             },
+//             "name": {
+//                 "type": "string",
+//                 "custom-denpendency": {
+//                     "denpendencies": ["root.firstname", "root.lastname"],
+//                     "value": "$deps[1]+' '+$deps[0]"
+//                 }
+//             },
+//             "birthday": {
+//                 "type": "number"
+//             },
+//             "age": {
+//                 "type": "number",
+//                 "custom-denpendency": {
+//                     "denpendencies": ["root.birthday"],
+//                     "value": "new Date().getFullYear()-$deps[0]"
+//                 }
+//             },
+//             "test1": {
+//                 "type": "string"
+//             },
+//             "test2": {
+//                 "type": "string",
+//                 "custom-denpendency": {
+//                     "denpendencies": ["root.test1"],
+//                     "value": "'test2+'+$deps[0]"
+//                 }
+//             },
+//             "test3": {
+//                 "type": "string",
+//                 "custom-denpendency": {
+//                     "denpendencies": ["root.test1", "root.test2"],
+//                     "value": "$deps[0]+' '+$deps[1]"
+//                 }
+//             },
+//         }
+//     },
+//     formdata: {
+//         "firstname": "z",
+//         "lastname": "t",
+//         "birthday": 1998
+//     }
+// })
 
 
-e.subscribe(["root.age"], (age) => {
-    console.log(`[subscribe] root.age=${age}`)
-})
+// e.subscribe(["root.age"], (age) => {
+//     console.log(`[subscribe] root.age=${age}`)
+// })
 
-e.subscribe(["root.name"], (name) => {
-    console.log(`[subscribe] root.name=${name}`)
-})
+// e.subscribe(["root.name"], (name) => {
+//     console.log(`[subscribe] root.name=${name}`)
+// })
 
-e.publish("root.birthday", 1997)
-e.publish("root.firstname", "zheng")
+// e.publish("root.birthday", 1997)
+// e.publish("root.firstname", "zheng")

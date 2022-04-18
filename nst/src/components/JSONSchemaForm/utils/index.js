@@ -12,6 +12,7 @@ import {
   TextareaWidget,
   ArrayTableWidget,
   NumberInputWidget,
+  SelectWidget,
 } from "../Widgets";
 
 export function getRegister() {
@@ -30,6 +31,7 @@ export function getRegister() {
       TextareaWidget,
       ArrayTableWidget,
       NumberInputWidget,
+      SelectWidget,
     }
   }
 }

@@ -11,20 +11,22 @@ export default class TextareaWidget extends React.PureComponent {
     //     // this.title = this.props.title;
     // }
     render() {
-        // console.log("TextareaWidget render");
+        // console.log("TextareaWidget render", this.props);
         return (
-            <div>
+            <div
+                style={this.props.style}
+            >
                 {/* <p>{this.title}</p> */}
                 <textarea
                     id={this.props.path}
                     className="form-textarea"
                     defaultValue={this.props.formdata ? this.props.formdata : ''}
                     onChange={(e) => {
-                        this.props.setFormdata(this.props.path, e.target.value);
+                        this.props.setFormdata(e.target.value);
                     }}
                     style={{
-                        height:'100px',
-                        resize:'none'
+                        height: '100px',
+                        resize: 'none'
                     }}
                 ></textarea>
             </div>
