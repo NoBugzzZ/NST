@@ -482,47 +482,69 @@ const forms = {
     }
   },
   "JS011": {
-    "type": "array",
-    "component": "ArrayTableWidget",
-    "items": {
-      "type": "object",
-      "properties": {
-        "序号": {
-          "type": "string",
-          "component": "StringInputWidget"
-        },
-        "问题（缺陷）简要描述": {
-          "type": "string",
-          "component": "StringInputWidget"
-        },
-        "对应需求条目": {
-          "type": "string",
-          "component": "StringInputWidget"
-        },
-        "发现缺陷的初始条件": {
-          "type": "string",
-          "component": "StringInputWidget"
-        },
-        "发现缺陷用例及具体操作路径（要具体）": {
-          "type": "string",
-          "component": "StringInputWidget"
-        },
-        "关联用例": {
-          "type": "string",
-          "component": "StringInputWidget"
-        },
-        "发现时间": {
-          "type": "string",
-          "component": "StringInputWidget"
-        },
-        "责任人": {
-          "type": "string",
-          "component": "StringInputWidget"
-        },
-        "修改建议": {
-          "type": "string",
-          "component": "StringInputWidget"
+    "schema": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "序号": {
+            "type": "string"
+          },
+          "问题（缺陷）简要描述": {
+            "type": "string"
+          },
+          "对应需求条目": {
+            "type": "string"
+          },
+          "发现缺陷的初始条件": {
+            "type": "string"
+          },
+          "发现缺陷用例及具体操作路径（要具体）": {
+            "type": "string"
+          },
+          "关联用例": {
+            "type": "string"
+          },
+          "发现时间": {
+            "type": "string"
+          },
+          "责任人": {
+            "type": "string"
+          },
+          "修改建议": {
+            "type": "string"
+          }
         }
+      }
+    },
+    "uischema": {
+      "component": "ArrayTableWidget",
+      "序号": {
+        "component": "StringInputWidget"
+      },
+      "问题（缺陷）简要描述": {
+        "component": "StringInputWidget"
+      },
+      "对应需求条目": {
+        "component": "StringInputWidget"
+      },
+      "发现缺陷的初始条件": {
+        "component": "StringInputWidget"
+      },
+      "发现缺陷用例及具体操作路径（要具体）": {
+        "component": "StringInputWidget"
+      },
+      "关联用例": {
+        "component": "StringInputWidget"
+      },
+      "发现时间":{
+        "component": "StringInputWidget"
+      },
+      "责任人":{
+        "component": "StringInputWidget"
+      },
+      "修改建议":{
+        "component": "StringInputWidget"
       }
     }
   },
@@ -590,7 +612,7 @@ const forms = {
         "custom-denpendency": {
           "denpendencies": ["root.hobby"],
           "style": {
-            "display":"$deps[0]==='无'?'none':''"
+            "display": "$deps[0]==='无'?'none':''"
           }
         }
       }

@@ -15,6 +15,12 @@ export default function Form() {
           uischema:schema.uischema,
           formdata
         });
+      }).catch(e=>{
+        console.log(e);
+        setData({
+          schema:schema.schema,
+          uischema:schema.uischema,
+        });
       })
 
     })

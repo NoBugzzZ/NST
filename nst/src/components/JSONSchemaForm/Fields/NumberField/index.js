@@ -8,7 +8,6 @@ export default class NumberField extends React.Component {
     this.state = { formdata: this.props.cusevent.getDataByPath(this.props.path) }
   }
   setFormdata(value) {
-    console.log("==========", value)
     this.setState({ formdata: value })
     this.props.cusevent.publish(this.props.path, value);
     // this.setState({

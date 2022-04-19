@@ -3,7 +3,7 @@ async function getFormdata(id) {
     const data = await new Promise((resolve, reject) => {
         const formdata = formdatas[id];
         if (formdata) resolve(formdata);
-        else reject({});
+        else reject({"message":`fetch fail`});
     })
     return data;
 }

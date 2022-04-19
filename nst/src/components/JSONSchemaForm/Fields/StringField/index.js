@@ -25,7 +25,6 @@ export default class StringField extends React.Component {
   //   return res;
   // }
   setFormdata(value) {
-    console.log("==========", value)
     this.setState({ formdata: value })
     this.props.cusevent.publish(this.props.path, value);
     // this.setState({
@@ -53,14 +52,13 @@ export default class StringField extends React.Component {
     if (styleDeps && styleProperty) {
       // styleProperty=JSON.parse(styleProperty);
       this.props.cusevent.subscribe(styleDeps, (values) => {
-        console.log("[style subscribe]", values);
         const style={};
         for (let key in styleProperty){
           console.log(styleProperty[key]);
           const func=new Function(`return ${styleProperty[key].replace(/\$deps/g,'arguments')}`);
           style[key]=func(...values);
         }
-        console.log("``````style",style)
+        console.log("[style subscribe]",style)
         this.setState({style});
       })
     }

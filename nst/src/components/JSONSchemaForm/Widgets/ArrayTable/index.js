@@ -48,7 +48,7 @@ export default class ArrayTableWidget extends React.PureComponent {
                 const newState = { formdata: [...prev.formdata] };
                 newState.formdata[index] = value;
                 // console.log(newState);
-                this.props.setFormdata(this.props.path, newState.formdata);
+                this.props.setFormdata(newState.formdata);
                 return newState;
             })
         } else {
@@ -57,7 +57,7 @@ export default class ArrayTableWidget extends React.PureComponent {
                 const newState = { formdata: [...prev.formdata] };
                 newState.formdata[index][paths[1]] = value;
                 // console.log(newState);
-                this.props.setFormdata(this.props.path, newState.formdata);
+                this.props.setFormdata(newState.formdata);
                 return newState;
             })
         }
@@ -95,7 +95,7 @@ export default class ArrayTableWidget extends React.PureComponent {
                                         this.setState(prev => {
                                             const newState = { formdata: [...prev.formdata] };
                                             newState.formdata.splice(index, 1);
-                                            this.props.setFormdata(this.props.path, newState.formdata);
+                                            this.props.setFormdata(newState.formdata);
                                             return newState;
                                         })
                                     }}
@@ -166,7 +166,7 @@ export default class ArrayTableWidget extends React.PureComponent {
                                             {} : undefined
                                     ]
                                 };
-                                this.props.setFormdata(this.props.path, newState.formdata);
+                                this.props.setFormdata(newState.formdata);
                                 return newState;
                             })
                         }}
