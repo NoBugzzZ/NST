@@ -5,6 +5,7 @@ import TextareaWidget from "./TextareaWidget";
 import ArrayTableWidget from "./ArrayTable";
 import NumberInputWidget from "./NumberInputWidget";
 import SelectWidget from "./SelectWidget";
+import ArrayListWidget from "./ArrayListWidget";
 
 export {
     StringInputWidget,
@@ -14,4 +15,5 @@ export {
     ArrayTableWidget,
     NumberInputWidget,
     SelectWidget,
+    ArrayListWidget,
 }

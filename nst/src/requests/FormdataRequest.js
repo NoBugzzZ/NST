@@ -15,8 +15,5 @@ const formdatas = {
         "firstname": "z",
         "lastname": "t",
         "birthday": 1998
-    },
-    "test2": {
-        "test1": "11",
     }
 }

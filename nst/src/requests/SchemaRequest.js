@@ -519,32 +519,34 @@ const forms = {
     },
     "uischema": {
       "component": "ArrayTableWidget",
-      "序号": {
-        "component": "StringInputWidget"
-      },
-      "问题（缺陷）简要描述": {
-        "component": "StringInputWidget"
-      },
-      "对应需求条目": {
-        "component": "StringInputWidget"
-      },
-      "发现缺陷的初始条件": {
-        "component": "StringInputWidget"
-      },
-      "发现缺陷用例及具体操作路径（要具体）": {
-        "component": "StringInputWidget"
-      },
-      "关联用例": {
-        "component": "StringInputWidget"
-      },
-      "发现时间":{
-        "component": "StringInputWidget"
-      },
-      "责任人":{
-        "component": "StringInputWidget"
-      },
-      "修改建议":{
-        "component": "StringInputWidget"
+      "items": {
+        "序号": {
+          "component": "StringInputWidget"
+        },
+        "问题（缺陷）简要描述": {
+          "component": "StringInputWidget"
+        },
+        "对应需求条目": {
+          "component": "StringInputWidget"
+        },
+        "发现缺陷的初始条件": {
+          "component": "StringInputWidget"
+        },
+        "发现缺陷用例及具体操作路径（要具体）": {
+          "component": "StringInputWidget"
+        },
+        "关联用例": {
+          "component": "StringInputWidget"
+        },
+        "发现时间": {
+          "component": "StringInputWidget"
+        },
+        "责任人": {
+          "component": "StringInputWidget"
+        },
+        "修改建议": {
+          "component": "StringInputWidget"
+        }
       }
     }
   },
@@ -651,6 +653,20 @@ const forms = {
       },
       "test3": {
         "component": "StringInputWidget"
+      }
+    }
+  },
+  "test3":{
+    "schema":{
+      "type":"array",
+      "items":{
+        "type":"string"
+      }
+    },
+    "uischema":{
+      "component":"ArrayListWidget",
+      "items":{
+        "component":"StringInputWidget"
       }
     }
   }

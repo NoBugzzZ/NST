@@ -19,6 +19,10 @@ const forms = [
         link: 'test2',
         name: 'test2'
     },
+    {
+        link: 'test3',
+        name: 'test3'
+    },
 ];
 
 export default function Navigator() {
