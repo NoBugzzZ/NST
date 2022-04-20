@@ -5,7 +5,7 @@ import { getDefaultTitle } from "../../utils";
 export default class NullField extends React.Component {
   render() {
     // this.cusEvent=getEvent();
-    console.log(`[render]`,this.props.path);
+    // console.log(`[render]`,this.props.path);
     const { component } = this.props.schema;
     const Widget = this.props.register.widget[component];
     const title = this.props.schema.title ?

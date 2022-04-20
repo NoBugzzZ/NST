@@ -64,11 +64,11 @@ export default class StringField extends React.Component {
     }
   }
   componentDidUpdate() {
-    console.log("[componentDidUpdate]", this.props.path);
+    // console.log("[componentDidUpdate]", this.props.path);
   }
   render() {
     // this.cusEvent=getEvent();
-    console.log(`[render]`, this.props.path);
+    // console.log(`[render]`, this.props.path);
     const { component } = this.props.uischema;
     const Widget = this.props.register.widget[component];
     const title = this.props.schema.title ?

@@ -2,7 +2,7 @@ class XEvent {
     constructor(props) {
         const { schema, formdata } = props;
         this.schema = schema;
-        this.formdata = formdata ? formdata : {};
+        this.formdata = formdata ? formdata : this.getDefaultFormdata(schema);
         this.queue = {};
         this.dependencyGraph = {};
         this.constructdependencyGraph(schema, "root");
@@ -11,6 +11,23 @@ class XEvent {
 
         console.log(this.formdata, this.dependencyGraph, this.topologicalOrder);
     }
+    getDefaultFormdata(schema){
+        const mapper={
+          "object":{},
+          "array":[],
+          "string":"",
+          "boolean":false,
+          "number":"",
+          "integer":"",
+          "null":null,
+        }
+        const {type}=schema;
+        if(mapper.hasOwnProperty(type)){
+          return mapper[type];
+        }else{
+            throw new Error(`json schema no such type=${type}`)
+        }
+      }
     constructdependencyGraph(schema, path) {
         const { type } = schema;
         if (type === "object") {

@@ -4,12 +4,7 @@ import "./index.css"
 export default class ArrayTableWidget extends React.PureComponent {
     constructor(props) {
         super(props);
-        // this.schema = this.props.schema;
-        // this.formdata = this.props.formdata ? this.props.formdata : [];
-        // this.path = this.props.path;
-        // this.setFormdata = this.props.setFormdata;
-        // this.register = this.props.register;
-        this.state = { formdata: [] };
+        this.state={formdata:this.props.formdata};
     }
     getTableHead() {
         const { type } = this.props.schema;
@@ -73,7 +68,7 @@ export default class ArrayTableWidget extends React.PureComponent {
                             key={index}
                         >
                             {Object.keys(this.props.schema.properties).map(key => {
-                                const { component } = this.props.schema.properties[key];
+                                const { component } = this.props.uischema[key];
                                 const Widget = this.props.register.widget[component];
                                 return (
                                     <td
@@ -111,7 +106,7 @@ export default class ArrayTableWidget extends React.PureComponent {
         return Body;
     }
     render() {
-        console.log("ArrayTableWidget render",this.props);
+        console.log("[render] ArrayTableWidget ",this.props);
         // console.log(this.props.schema, this.state);
         return (
             <div

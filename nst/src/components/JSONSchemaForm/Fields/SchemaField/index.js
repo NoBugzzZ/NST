@@ -9,12 +9,16 @@ export default class SchemaField extends React.Component {
   //   this.path = this.props.path
   //   this.setFormdata = this.props.setFormdata;
   // }
-  // componentDidMount() {
-  //   console.log("[componentDidMount]", this.props.path);
-  // }
-  // componentDidUpdate(prevProps, prevState, snaphot) {
-  //   console.log("[componentDidUpdate]", this.props.path)
-  // }
+  constructor(props){
+    super(props);
+    console.log("[constructor]", this.props.path);
+  }
+  componentDidMount() {
+    console.log("[componentDidMount]", this.props.path);
+  }
+  componentDidUpdate(prevProps, prevState, snaphot) {
+    console.log("[componentDidUpdate]", this.props.path)
+  }
   getRenderField() {
     const { type } = this.props.schema;
     let Field = null;
@@ -53,6 +57,7 @@ export default class SchemaField extends React.Component {
     )
   }
   render() {
+    console.log("[render]", this.props.path)
     return (
       <>
         {

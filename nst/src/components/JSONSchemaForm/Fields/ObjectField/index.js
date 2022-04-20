@@ -15,7 +15,7 @@ export default class ObjectField extends React.Component {
 
   render() {
     // this.cusEvent = getEvent();
-    console.log(`[render]`, this.props.path);
+    // console.log(`[render]`, this.props.path);
     const title = this.props.schema.title ?
       this.props.schema.title :
       getDefaultTitle(this.props.path);

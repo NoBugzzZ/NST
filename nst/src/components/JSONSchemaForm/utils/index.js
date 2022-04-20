@@ -70,3 +70,20 @@ export function getFontSize(path) {
   const size = 35 - len * 5;
   return size >= 16 ? size : 16;
 }
+
+export function getDefaultFormdata(schema){
+  const mapper={
+    "object":{},
+    "array":[],
+    "string":"",
+    "boolean":false,
+    "number":"",
+    "integer":"",
+    "null":null,
+  }
+  const {type}=schema;
+  if(mapper.hasOwnProperty(type)){
+    return mapper[type];
+  }
+  return {};
+}

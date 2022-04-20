@@ -16,18 +16,18 @@ export default class NumberField extends React.Component {
   }
 
   componentDidMount() {
-    console.log("[componentDidMount]", this.props.path);
+    // console.log("[componentDidMount]", this.props.path);
     this.props.cusevent.subscribe([this.props.path], (values) => {
       console.log("[subscribe]", values);
       this.setState({ formdata: values[0] })
     })
   }
   componentDidUpdate() {
-    console.log("[componentDidUpdate]", this.props.path);
+    // console.log("[componentDidUpdate]", this.props.path);
   }
   render() {
     // this.cusEvent=getEvent();
-    console.log(`[render]`, this.props.path, this.props.cusevent.getDataByPath(this.props.path));
+    // console.log(`[render]`, this.props.path, this.props.cusevent.getDataByPath(this.props.path));
     const { component } = this.props.uischema;
     const Widget = this.props.register.widget[component];
     const title = this.props.schema.title ?
