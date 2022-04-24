@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
-import { Paper, JSONSchemaForm } from "../components"
+import { Paper, JSONSchemaForm, JSForm } from "../components"
 import { getForm, getFormdata } from "../requests"
 
 export default function Form() {
@@ -11,27 +11,31 @@ export default function Form() {
     getForm(params.formId).then((schema) => {
       getFormdata(params.formId).then(formdata => {
         setData({
-          schema:schema.schema,
-          uischema:schema.uischema,
+          schema: schema.schema,
+          uischema: schema.uischema,
           formdata
         });
-      }).catch(e=>{
+      }).catch(e => {
         console.log(e);
         setData({
-          schema:schema.schema,
-          uischema:schema.uischema,
+          schema: schema.schema,
+          uischema: schema.uischema,
         });
       })
 
     })
   }, [params])
+
   return (
     <Paper>
       {/* {JSON.stringify(schema)} */}
       <JSONSchemaForm
         schema={data?.schema}
         uischema={data?.uischema}
-        formdata={data?.formdata} />
+        formdata={data?.formdata}
+      />
+
+      <JSForm />
     </Paper>
   )
 }
