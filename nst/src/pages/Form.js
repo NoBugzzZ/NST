@@ -29,13 +29,17 @@ export default function Form() {
   return (
     <Paper>
       {/* {JSON.stringify(schema)} */}
-      <JSONSchemaForm
+      {/* <JSONSchemaForm
+        schema={data?.schema}
+        uischema={data?.uischema}
+        formdata={data?.formdata}
+      /> */}
+
+      <JSForm
         schema={data?.schema}
         uischema={data?.uischema}
         formdata={data?.formdata}
       />
-
-      <JSForm />
     </Paper>
   )
 }

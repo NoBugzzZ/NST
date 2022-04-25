@@ -23,6 +23,10 @@ const forms = [
         link: 'test3',
         name: 'test3'
     },
+    {
+        link: 'test4',
+        name: 'test4'
+    },
 ];
 
 export default function Navigator() {
