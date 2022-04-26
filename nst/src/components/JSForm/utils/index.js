@@ -1,3 +1,22 @@
+import {
+    StringField,
+} from "../Fields"
+import {
+    StringWidget
+} from "../Widgets"
+
+function getRegister(widgets) {
+    return {
+        fields: {
+            StringField,
+        },
+        widgets: {
+            ...widgets,
+            StringWidget,
+        }
+    }
+}
+
 function constructForm(props) {
     const form = {};
     traverseSchema(form, props.schema, 'root');
@@ -10,6 +29,7 @@ function traverseSchema(form = {}, schema = {}, path = '') {
     form[path] = {
         type,
         title: title ? title : getDefaultTitle(path),
+        field: type[0].toUpperCase() + type.slice(1) + "Field",
     }
     switch (type) {
         case 'object':
@@ -36,11 +56,27 @@ function getDefaultTitle(path = "root") {
     return paths[paths.length - 1];
 }
 
-function traverseUISchema(form,uischema){
-    
+function getDefaultComponent(schema) {
+    const { type } = schema;
+    if (type) {
+        return type[0].toUpperCase() + type.slice(1) + "Widget";
+    } else {
+        throw new Error(`[TypeError] JSONSchema has no type for ${type}`);
+    }
 }
 
-function getUISchemaByPath(uischema, path) {
+function traverseUISchema(form, uischema) {
+    for (let path in form) {
+        let { component } = getUISchemaByPath(uischema, path);
+        component = component ? component : getDefaultComponent(form[path]);
+        form[path] = {
+            ...form[path],
+            widget: component
+        }
+    }
+}
+
+function getUISchemaByPath(uischema = {}, path = '') {
     const paths = path.split(".");
     const len = paths.length;
     if (len === 1) return uischema;
@@ -52,4 +88,44 @@ function getUISchemaByPath(uischema, path) {
     return res;
 }
 
-export { constructForm }
+function constructCells(form, uischema) {
+    const cells = [];
+    const { display } = getUISchemaByPath(uischema, "root");
+    if (display === "table") {
+        for (let [path, value] of Object.entries(form)) {
+            if (value.type === "object") continue;
+            const { location } = getUISchemaByPath(uischema, path);
+            setCellByLocation(cells, {
+                path,
+                ...value,
+            }, location)
+        }
+    } else {
+        for (let [path, value] of Object.entries(form)) {
+            if (value.type === "object") continue;
+            cells.push([{
+                path,
+                ...value
+            }])
+        }
+    }
+    return cells;
+}
+
+function setCellByLocation(cells, cell, location) {
+    expandCells(cells, location);
+    const { row, col } = location;
+    cells[row - 1][col - 1] = cell;
+}
+
+function expandCells(cells, location) {
+    const { row, col } = location;
+    for (let i = cells.length; i < row; i++) {
+        cells.push([]);
+    }
+    for (let i = cells[row - 1].length; i < col; i++) {
+        cells[row - 1].push({});
+    }
+}
+
+export { constructForm, constructCells, getRegister }

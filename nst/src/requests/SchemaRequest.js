@@ -678,14 +678,45 @@ const forms = {
       "type": "object",
       "title": "test",
       "properties": {
-        "test1": {
+        "data1": {
+          "type": "string"
+        },
+        "data2": {
+          "type": "string"
+        },
+        "data3": {
+          "type": "string"
+        },
+        "data4": {
           "type": "string"
         }
       }
     },
     "uischema": {
-      "test1": {
-        "component": "StringInputWidget"
+      "display":"table",
+      "data1": {
+        "location":{
+          "row":"1",
+          "col":"1"
+        }
+      },
+      "data2": {
+        "location":{
+          "row":"1",
+          "col":"2"
+        }
+      },
+      "data3": {
+        "location":{
+          "row":"2",
+          "col":"1"
+        }
+      },
+      "data4": {
+        "location":{
+          "row":"2",
+          "col":"2"
+        }
       }
     }
   }
