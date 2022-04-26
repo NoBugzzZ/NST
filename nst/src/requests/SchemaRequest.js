@@ -693,7 +693,6 @@ const forms = {
       }
     },
     "uischema": {
-      "display":"table",
       "data1": {
         "location":{
           "row":"1",

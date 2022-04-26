@@ -14,10 +14,18 @@ export default class JSForm extends React.PureComponent {
         return { form, cells, register }
     }
 
+    changeStyle(display){
+
+    }
+
     render() {
         console.log(this.state)
         return (
-            <table>
+            <table
+                style={{
+                    padding:0
+                }}
+            >
                 <tbody>
                     {this.state.cells.map((row, index) => {
                         return (
@@ -29,6 +37,9 @@ export default class JSForm extends React.PureComponent {
                                     return (
                                         <td
                                             key={cell.path}
+                                            style={{
+                                                padding:0
+                                            }}
                                         >
                                             <Field
                                                 cell={cell}
