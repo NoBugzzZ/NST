@@ -103,68 +103,68 @@ let getEvent = (function () {
 
 // export { XEvent, getEvent }
 
-// function changeFormdata(){
-//     const firstname=this.getDataByPath("root.firstname");
-//     const lastname=this.getDataByPath("root.lastname");
-//     if(firstname&&lastname){
-//         this.setDataByPath("root.name",firstname+lastname)
-//     }
-
-//     const birthday=+this.getDataByPath("root.birthda");
-//     if(isFinite(birthday)){
-//         this.setDataByPath("root.age",new Date().getFullYear()-birthday);
-//     }
-// }
-
-// const e = getEvent({
-//     schema: {
-//         "type": "object",
-//         "properties": {
-//             "firstname": {
-//                 "type": "string"
-//             },
-//             "lastname": {
-//                 "type": "string"
-//             },
-//             "name": {
-//                 "type": "string",
-//             },
-//             "birthday": {
-//                 "type": "number"
-//             },
-//             "age": {
-//                 "type": "number",
-//             },
-//             "test1": {
-//                 "type": "string"
-//             },
-//             "test2": {
-//                 "type": "string",
-//             },
-//             "test3": {
-//                 "type": "string",
-//             },
-//         }
-//     },
-//     formdata: {
-//         "firstname": "z",
-//         "lastname": "t",
-//         "birthday": 1998
-//     },
-//     changeFormdata,
-// })
 
 
-// e.subscribe(["root.age"], (age) => {
-//     console.log(`[subscribe] root.age=${age}`)
-// })
+const e = getEvent({
+    schema: {
+        "type": "object",
+        "properties": {
+            "firstname": {
+                "type": "string"
+            },
+            "lastname": {
+                "type": "string"
+            },
+            "name": {
+                "type": "string",
+            },
+            "birthday": {
+                "type": "number"
+            },
+            "age": {
+                "type": "number",
+            },
+            "test1": {
+                "type": "string"
+            },
+            "test2": {
+                "type": "string",
+            },
+            "test3": {
+                "type": "string",
+            },
+        }
+    },
+    formdata: {
+        "firstname": "z",
+        "lastname": "t",
+        "birthday": 1998
+    },
+    changeFormdata: function () {
+        const firstname = this.getDataByPath("root.firstname");
+        const lastname = this.getDataByPath("root.lastname");
+        if (firstname && lastname) {
+            this.setDataByPath("root.name", lastname + firstname)
+        }
 
-// e.subscribe(["root.name"], (name) => {
-//     console.log(`[subscribe] root.name=${name}`)
-// })
+        const birthday = +this.getDataByPath("root.birthday");
+        if (isFinite(birthday)) {
+            this.setDataByPath("root.age", new Date().getFullYear() - birthday);
+        }
+    }
+})
 
-// e.publish("root.birthday", 1997)
-// e.publish("root.firstname", "zheng")
+
+e.subscribe(["root.age"], (age) => {
+    console.log(`[subscribe] root.age=${age}`)
+})
+
+e.subscribe(["root.name"], (name) => {
+    console.log(`[subscribe] root.name=${name}`)
+})
+
+e.publish("root.birthday", 1997)
+e.publish("root.firstname", "zheng")
 
 
 /**
