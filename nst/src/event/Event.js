@@ -1,12 +1,185 @@
+// class XEvent {
+//     constructor(props) {
+//         const { schema, formdata, changeFormdata } = props;
+//         this.schema = schema;
+//         this.formdata = formdata || this.getDefaultFormdata(schema);
+//         this.changeFormdata = changeFormdata.bind(this) || function () { };
+//         this.queue = {};
+//         this.changeFormdata();
+//         console.log(this);
+//     }
+//     getDefaultFormdata(schema) {
+//         const mapper = {
+//             "object": {},
+//             "array": [],
+//             "string": "",
+//             "boolean": false,
+//             "number": "",
+//             "integer": "",
+//             "null": null,
+//         }
+//         const { type } = schema;
+//         if (mapper.hasOwnProperty(type)) {
+//             return mapper[type];
+//         } else {
+//             throw new Error(`json schema no such type=${type}`)
+//         }
+//     }
+//     setDataByPath(path = "root", value) {
+//         const paths = path.split(".");
+//         if (paths.length === 1) this.formdata = value;
+//         this.formdata = this.formdata ? this.formdata : {};
+//         let temp = this.formdata;
+//         const len = paths.length;
+//         for (let i = 1; i < len; i++) {
+//             let key = paths[i];
+//             if ((len - 1) === i) temp[key] = value;
+//             else {
+//                 if (key in temp) temp = temp[key];
+//                 else {
+//                     temp[key] = {};
+//                     temp = temp[key];
+//                 }
+//             }
+//         }
+//         this.notify(path);
+//     }
+//     getDataByPath(path) {
+//         const paths = path.split(".");
+//         if (paths.length === 1) return this.formdata;
+//         let temp = this.formdata;
+//         const len = paths.length;
+//         for (let i = 1; i < len; i++) {
+//             let key = paths[i];
+//             if ((len - 1) === i) return temp[key];
+//             else {
+//                 temp = temp[key];
+//                 if (!temp) return undefined;
+//             }
+//         }
+//     }
+//     notify(path) {
+//         const callbackArray = this.queue[path];
+//         if (callbackArray) {
+//             // console.log(callbackArray)
+//             callbackArray.forEach(item => {
+//                 const { paths, callback } = item;
+//                 callback(paths.map(path => this.getDataByPath(path)))
+//             })
+//         }
+//     }
+
+//     //外部根据path更改值的方法
+//     publish(path, value) {
+//         // console.log(`[publish] ${path}=${value}`);
+//         this.setDataByPath(path, value);
+//         this.changeFormdata();
+//     }
+//     //外部根据path订阅值更新的方法
+//     subscribe(paths, callback) {
+//         paths.forEach(path => {
+//             if (!this.queue[path]) {
+//                 this.queue[path] = [];
+//             }
+//             this.queue[path].push({ callback, paths });
+//         })
+
+//         // console.log(this.queue);
+//     }
+// }
+
+// let getEvent = (function () {
+//     let _instance = null;
+//     return (props) => {
+//         // console.log("[event]", props)
+//         if (!props) return _instance;
+//         const { schema, formdata, changeFormdata } = props
+//         if (!schema) return _instance;
+//         _instance = new XEvent({ schema, formdata, changeFormdata });
+//         return _instance;
+//     }
+// })()
+
+
+// // export { XEvent, getEvent }
+
+
+
+// const e = getEvent({
+//     schema: {
+//         "type": "object",
+//         "properties": {
+//             "firstname": {
+//                 "type": "string"
+//             },
+//             "lastname": {
+//                 "type": "string"
+//             },
+//             "name": {
+//                 "type": "string",
+//             },
+//             "birthday": {
+//                 "type": "number"
+//             },
+//             "age": {
+//                 "type": "number",
+//             },
+//             "test1": {
+//                 "type": "string"
+//             },
+//             "test2": {
+//                 "type": "string",
+//             },
+//             "test3": {
+//                 "type": "string",
+//             },
+//         }
+//     },
+//     formdata: {
+//         "firstname": "z",
+//         "lastname": "t",
+//         "birthday": 1998
+//     },
+//     changeFormdata: function () {
+//         const firstname = this.getDataByPath("root.firstname");
+//         const lastname = this.getDataByPath("root.lastname");
+//         if (firstname && lastname) {
+//             this.setDataByPath("root.name", lastname + firstname)
+//         }
+
+//         const birthday = +this.getDataByPath("root.birthday");
+//         if (isFinite(birthday)) {
+//             this.setDataByPath("root.age", new Date().getFullYear() - birthday);
+//         }
+//     }
+// })
+
+
+// e.subscribe(["root.age"], (age) => {
+//     console.log(`[subscribe] root.age=${age}`)
+// })
+
+// e.subscribe(["root.name"], (name) => {
+//     console.log(`[subscribe] root.name=${name}`)
+// })
+
+// e.publish("root.birthday", 1997)
+// e.publish("root.firstname", "zheng")
+
+
+
 class XEvent {
     constructor(props) {
-        const { schema, formdata, changeFormdata } = props;
+        const { schema, formdata } = props;
         this.schema = schema;
-        this.formdata = formdata || this.getDefaultFormdata(schema);
-        this.changeFormdata = changeFormdata.bind(this) || function () { };
+        this.formdata = formdata ? formdata : this.getDefaultFormdata(schema);
         this.queue = {};
-        this.changeFormdata();
-        console.log(this);
+        this.dependencyGraph = {};
+        this.constructdependencyGraph(schema, "root");
+        this.topologicalOrder = this.topologicalSort();
+        this.initialFormdata()
+
+        console.log(this.formdata, this.dependencyGraph, this.topologicalOrder);
     }
     getDefaultFormdata(schema) {
         const mapper = {
@@ -25,179 +198,6 @@ class XEvent {
             throw new Error(`json schema no such type=${type}`)
         }
     }
-    setDataByPath(path = "root", value) {
-        const paths = path.split(".");
-        if (paths.length === 1) this.formdata = value;
-        this.formdata = this.formdata ? this.formdata : {};
-        let temp = this.formdata;
-        const len = paths.length;
-        for (let i = 1; i < len; i++) {
-            let key = paths[i];
-            if ((len - 1) === i) temp[key] = value;
-            else {
-                if (key in temp) temp = temp[key];
-                else {
-                    temp[key] = {};
-                    temp = temp[key];
-                }
-            }
-        }
-        this.notify(path);
-    }
-    getDataByPath(path) {
-        const paths = path.split(".");
-        if (paths.length === 1) return this.formdata;
-        let temp = this.formdata;
-        const len = paths.length;
-        for (let i = 1; i < len; i++) {
-            let key = paths[i];
-            if ((len - 1) === i) return temp[key];
-            else {
-                temp = temp[key];
-                if (!temp) return undefined;
-            }
-        }
-    }
-    notify(path) {
-        const callbackArray = this.queue[path];
-        if (callbackArray) {
-            // console.log(callbackArray)
-            callbackArray.forEach(item => {
-                const { paths, callback } = item;
-                callback(paths.map(path => this.getDataByPath(path)))
-            })
-        }
-    }
-
-    //外部根据path更改值的方法
-    publish(path, value) {
-        // console.log(`[publish] ${path}=${value}`);
-        this.setDataByPath(path, value);
-        this.changeFormdata();
-    }
-    //外部根据path订阅值更新的方法
-    subscribe(paths, callback) {
-        paths.forEach(path => {
-            if (!this.queue[path]) {
-                this.queue[path] = [];
-            }
-            this.queue[path].push({ callback, paths });
-        })
-
-        // console.log(this.queue);
-    }
-}
-
-let getEvent = (function () {
-    let _instance = null;
-    return (props) => {
-        // console.log("[event]", props)
-        if (!props) return _instance;
-        const { schema, formdata, changeFormdata } = props
-        if (!schema) return _instance;
-        _instance = new XEvent({ schema, formdata, changeFormdata });
-        return _instance;
-    }
-})()
-
-
-// export { XEvent, getEvent }
-
-
-
-const e = getEvent({
-    schema: {
-        "type": "object",
-        "properties": {
-            "firstname": {
-                "type": "string"
-            },
-            "lastname": {
-                "type": "string"
-            },
-            "name": {
-                "type": "string",
-            },
-            "birthday": {
-                "type": "number"
-            },
-            "age": {
-                "type": "number",
-            },
-            "test1": {
-                "type": "string"
-            },
-            "test2": {
-                "type": "string",
-            },
-            "test3": {
-                "type": "string",
-            },
-        }
-    },
-    formdata: {
-        "firstname": "z",
-        "lastname": "t",
-        "birthday": 1998
-    },
-    changeFormdata: function () {
-        const firstname = this.getDataByPath("root.firstname");
-        const lastname = this.getDataByPath("root.lastname");
-        if (firstname && lastname) {
-            this.setDataByPath("root.name", lastname + firstname)
-        }
-
-        const birthday = +this.getDataByPath("root.birthday");
-        if (isFinite(birthday)) {
-            this.setDataByPath("root.age", new Date().getFullYear() - birthday);
-        }
-    }
-})
-
-
-e.subscribe(["root.age"], (age) => {
-    console.log(`[subscribe] root.age=${age}`)
-})
-
-e.subscribe(["root.name"], (name) => {
-    console.log(`[subscribe] root.name=${name}`)
-})
-
-e.publish("root.birthday", 1997)
-e.publish("root.firstname", "zheng")
-
-
-/**
-class YEvent {
-    constructor(props) {
-        const { schema, formdata } = props;
-        this.schema = schema;
-        this.formdata = formdata ? formdata : this.getDefaultFormdata(schema);
-        this.queue = {};
-        this.dependencyGraph = {};
-        this.constructdependencyGraph(schema, "root");
-        this.topologicalOrder = this.topologicalSort();
-        this.initialFormdata()
-
-        console.log(this.formdata, this.dependencyGraph, this.topologicalOrder);
-    }
-    getDefaultFormdata(schema){
-        const mapper={
-          "object":{},
-          "array":[],
-          "string":"",
-          "boolean":false,
-          "number":"",
-          "integer":"",
-          "null":null,
-        }
-        const {type}=schema;
-        if(mapper.hasOwnProperty(type)){
-          return mapper[type];
-        }else{
-            throw new Error(`json schema no such type=${type}`)
-        }
-      }
     constructdependencyGraph(schema, path) {
         const { type } = schema;
         if (type === "object") {
@@ -391,4 +391,16 @@ class YEvent {
         // console.log(this.queue);
     }
 }
- */
+
+
+let getEvent = (function () {
+    let _instance = null;
+    return (props) => {
+        if (!props) return _instance;
+        const { schema, formdata } = props
+        if (!schema) return _instance;
+        _instance = new XEvent({ schema, formdata });
+        return _instance;
+    }
+})()
+
