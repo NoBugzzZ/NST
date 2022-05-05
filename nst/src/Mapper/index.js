@@ -3,8 +3,51 @@ var _ = require("lodash")
 class Mapper {
   constructor(mapper) {
     this.mapper = mapper;
+    this.graph = this.constructDependencyGraph(mapper);
+    console.log(this.graph);
   }
-  transform(oldData) {
+  constructDependencyGraph(mapper) {
+    const graph = {}
+    mapper.forEach(m => {
+      const { source } = m;
+      source.forEach(s => {
+        if (!(s in graph)) {
+          graph[s] = [];
+        }
+        graph[s].push(m)
+      })
+    })
+    return graph;
+  }
+  changeFormdata(oldData, event) {
+    return this.setDataByPath(event.path, event.value, oldData);
+  }
+  transform(oldData, events) {
+    events.forEach(event => {
+      oldData = this.changeFormdata(oldData, event);
+    })
+
+    events.forEach(event => {
+      if (event.path in this.graph) {
+        const deps = this.graph[event.path];
+        deps.forEach(dep => {
+          const { source, target, expression } = dep
+          const sourceData = [];
+          for (let s of source) {
+            const d = this.getDataByPath(s, oldData);
+            if (d === null || d === undefined) return;
+            sourceData.push(d);
+          }
+          const computedData = expression.apply(null, sourceData);
+          target.forEach(t => {
+            oldData = this.setDataByPath(t, computedData, oldData);
+          })
+        })
+      }
+    })
+    return oldData;
+  }
+  initializeFormdata(oldData) {
     let newData = _.cloneDeep(oldData);
     const derivedData = this.mapper
       .reduce((previousValue, currentValue) => {
@@ -77,12 +120,17 @@ const mapper = new Mapper([
     expression: (birthday) => new Date().getFullYear() - birthday
   }
 ])
-console.log(mapper.transform({
+
+const formdata = mapper.initializeFormdata({
   lastname: "t",
   firstname: "z",
   birthday: 1998
-},
-  [
-    "root.birthday"
-  ]
-))
+})
+console.log(formdata)
+
+console.log(mapper.transform(formdata, [
+  {
+    path: "root.birthday",
+    value: 1999
+  }
+]))
