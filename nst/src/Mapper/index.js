@@ -19,33 +19,40 @@ class Mapper {
     })
     return graph;
   }
-  changeFormdata(oldData, event) {
-    return this.setDataByPath(event.path, event.value, oldData);
+  changeFormdata(event) {
+    return this.setDataByPath(event.path, event.value, this.formdata);
   }
-  transform(oldData, events) {
+  transform(events) {
     events.forEach(event => {
-      oldData = this.changeFormdata(oldData, event);
+      this.formdata = this.changeFormdata(event);
     })
 
+    const depsSet = new Set();
     events.forEach(event => {
       if (event.path in this.graph) {
         const deps = this.graph[event.path];
         deps.forEach(dep => {
-          const { source, target, expression } = dep
-          const sourceData = [];
-          for (let s of source) {
-            const d = this.getDataByPath(s, oldData);
-            if (d === null || d === undefined) return;
-            sourceData.push(d);
-          }
-          const computedData = expression.apply(null, sourceData);
-          target.forEach(t => {
-            oldData = this.setDataByPath(t, computedData, oldData);
-          })
+          depsSet.add(dep)
         })
       }
     })
-    return oldData;
+
+    const changes = []
+    nextdep: for (let dep of depsSet) {
+      const { source, target, expression } = dep
+      const sourceData = [];
+      for (let s of source) {
+        const d = this.getDataByPath(s, this.formdata);
+        if (d === null || d === undefined) break nextdep;
+        sourceData.push(d);
+      }
+      const computedData = expression.apply(null, sourceData);
+      target.forEach(t => {
+        changes.push({ path: t, value: computedData });
+        this.formdata = this.setDataByPath(t, computedData, this.formdata);
+      })
+    }
+    return changes;
   }
   initializeFormdata(oldData) {
     let newData = _.cloneDeep(oldData);
@@ -69,6 +76,7 @@ class Mapper {
         this.setDataByPath(t, computedData, newData);
       })
     })
+    this.formdata = newData;
     return newData;
   }
   setDataByPath(path = "root", value, formdata) {
@@ -128,9 +136,54 @@ const formdata = mapper.initializeFormdata({
 })
 console.log(formdata)
 
-console.log(mapper.transform(formdata, [
+console.log(mapper.transform([
   {
     path: "root.birthday",
     value: 1999
+  },
+  {
+    path: "root.lastname",
+    value: "tang"
+  },
+  {
+    path: "root.firstname",
+    value: "zheng"
   }
 ]))
+
+function debounce(func, ms) {
+  let timer;
+  return function (...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      func.apply(this, args);
+    }, ms)
+  }
+}
+
+class Event {
+  constructor(mapper, formdata) {
+    this.mapper = new Mapper(mapper);
+    this.formdata = mapper.initializeFormdata(formdata);
+    this.subscriber = {};
+    this.queue = {};
+    this.transform = debounce(this.mapper.transform.bind(this.mapper), 1000)
+  }
+  changeFormdata() {
+    const transforms = this.transform(Object.values(this.queue));
+  }
+  publish(path, value) {
+    this.queue[path] = {
+      path,
+      value,
+    }
+  }
+  subscribe(paths, callback) {
+    paths.forEach(path => {
+      if (!this.subscriber[path]) {
+        this.subscriber[path] = [];
+      }
+      this.subscriber[path].push({ callback, paths });
+    })
+  }
+}
