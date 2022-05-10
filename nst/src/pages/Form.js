@@ -3,12 +3,14 @@ import { useParams } from "react-router-dom"
 import { Paper, JSONSchemaForm, JSForm } from "../components"
 import { getForm, getFormdata } from "../requests"
 import { ObjectForm, MatrixForm, ArrayForm } from "../components/Form"
+import { ObjectField, StringField, ArrayField } from "../components/MyForm"
+import { StringInput } from "../components/FormComponents"
 
 export default function Form() {
   const [data, setData] = useState(null);
   let params = useParams();
   useEffect(() => {
-    console.log(`form/${params.formId}`)
+    // console.log(`form/${params.formId}`)
     getForm(params.formId).then((schema) => {
       getFormdata(params.formId).then(formdata => {
         setData({
@@ -17,7 +19,7 @@ export default function Form() {
           formdata
         });
       }).catch(e => {
-        console.log(e);
+        // console.log(e);
         setData({
           schema: schema.schema,
           uischema: schema.uischema,
@@ -27,8 +29,43 @@ export default function Form() {
     })
   }, [params])
 
+  const Element=(
+    <div>
+      <h2>{221+21}</h2>
+      <p>sasasa</p>
+    </div>
+  )
+
+  console.log({Element})
+
   return (
     <Paper>
+      {Element}
+      <ObjectField
+      >
+        <StringField
+          name={"myname"}
+          component={StringInput}
+        />
+        <StringField
+            name={"age"}
+            component={StringInput}
+          />
+      </ObjectField>
+
+      <ArrayField>
+        <ObjectField
+        >
+          <StringField
+            name={"myname"}
+            component={StringInput}
+          />
+          <StringField
+            name={"age"}
+            component={StringInput}
+          />
+        </ObjectField>
+      </ArrayField>
       {/* {JSON.stringify(schema)} */}
       {/* <JSONSchemaForm
         schema={data?.schema}
@@ -42,7 +79,7 @@ export default function Form() {
         formdata={data?.formdata}
       /> */}
 
-      <ObjectForm
+      {/* <ObjectForm
         schema={{
           "type": "object",
           "properties": {
@@ -90,7 +127,7 @@ export default function Form() {
           ["row1", "1-1", "1-2", "1-3"],
           ["row2", "2-1", "2-2", "2-3"],
         ]}
-      />
+      /> */}
     </Paper>
   )
 }
