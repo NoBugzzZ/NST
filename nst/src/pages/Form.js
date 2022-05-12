@@ -29,18 +29,8 @@ export default function Form() {
     })
   }, [params])
 
-  const Element=(
-    <div>
-      <h2>{221+21}</h2>
-      <p>sasasa</p>
-    </div>
-  )
-
-  console.log({Element})
-
   return (
     <Paper>
-      {Element}
       <ObjectField
       >
         <StringField
@@ -48,9 +38,9 @@ export default function Form() {
           component={StringInput}
         />
         <StringField
-            name={"age"}
-            component={StringInput}
-          />
+          name={"age"}
+          component={StringInput}
+        />
       </ObjectField>
 
       <ArrayField>
@@ -79,7 +69,7 @@ export default function Form() {
         formdata={data?.formdata}
       /> */}
 
-      {/* <ObjectForm
+      <ObjectForm
         schema={{
           "type": "object",
           "properties": {
@@ -96,29 +86,29 @@ export default function Form() {
         }}
       >
       </ObjectForm>
-      <hr/>
+      <hr />
       <ArrayForm
-      schema={{
-        "type":"array",
-        "items":{
-          "type":"object",
-          "properties":{
-            "lastname": {
-              "type": "string"
-            },
-            "firstname": {
-              "type": "string"
-            },
-            "name": {
-              "type": "string"
+        schema={{
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "lastname": {
+                "type": "string"
+              },
+              "firstname": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              }
             }
           }
-        }
-      }}
-      formdata={[
-        {lastname:"z",firstname:"t",name:"tz"},
-        {lastname:"z",firstname:"t",name:"tz"},
-      ]}
+        }}
+        formdata={[
+          { lastname: "z", firstname: "t", name: "tz" },
+          { lastname: "z", firstname: "t", name: "tz" },
+        ]}
       />
       <hr />
       <MatrixForm
@@ -127,7 +117,7 @@ export default function Form() {
           ["row1", "1-1", "1-2", "1-3"],
           ["row2", "2-1", "2-2", "2-3"],
         ]}
-      /> */}
+      />
     </Paper>
   )
 }

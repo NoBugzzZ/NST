@@ -2,13 +2,10 @@ import React, { useEffect, useState } from "react"
 
 export default function ObjectField({ ancient = "", name="", children }) {
     console.log(`[object] ${ancient} ${name}`)
+    const Context=React.createContext({msg:"11"})
     return (
-        <>
-            {React.Children.map(children, child => {
-                return React.cloneElement(child, {
-                    ancient: `${ancient}.${name}`
-                })
-            })}
-        </>
+        <Context.Provider value={{msg:"aa"}}>
+            {children}
+        </Context.Provider>
     )
 }
