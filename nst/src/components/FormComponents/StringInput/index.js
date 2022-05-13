@@ -1,5 +1,5 @@
-export default function StringInput(props){
-    return(
-        <input defaultValue={props.formdata?props.formdata:""}></input>
+export default function StringInput({ formdata }) {
+    return (
+        <input defaultValue={formdata ? formdata : ""}></input>
     )
 }

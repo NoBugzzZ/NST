@@ -1,11 +1,21 @@
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
+import PathContext from "../Context"
 
-export default function ObjectField({ ancient = "", name="", children }) {
-    console.log(`[object] ${ancient} ${name}`)
-    const Context=React.createContext({msg:"11"})
+export default function ObjectField({ name, children, component: Component }) {
+    const path = useContext(PathContext);
+    console.log("[object]")
     return (
-        <Context.Provider value={{msg:"aa"}}>
-            {children}
-        </Context.Provider>
+        <>
+            {Component
+                ? (<Component>
+                    <PathContext.Provider value={name ? `${path}.${name}` : path}>
+                        {children}
+                    </PathContext.Provider>
+                </Component>)
+                : <PathContext.Provider value={name ? `${path}.${name}` : path}>
+                    {children}
+                </PathContext.Provider>
+            }
+        </>
     )
 }

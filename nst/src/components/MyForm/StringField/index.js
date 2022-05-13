@@ -1,17 +1,19 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
+import PathContext from "../Context";
 
 export default function StringField({
   title,
   name,
-  ancient = "",
   component:Component,
 }) {
-  // console.log(`[string] ${ancient} ${name} ${title}`)
-
   const [formdata, setFormdata] = useState(null);
-  useEffect(() => {
-    setFormdata(Math.random().toFixed(2))
-  }, [])
+  // useEffect(() => {
+  //   setFormdata(Math.random().toFixed(2))
+  // }, [])
+  
+  const path=useContext(PathContext)
+  // console.log(`${path}.${name}`)
+  console.log("[string]")
   return (
     <>
       {title ? title : null}
