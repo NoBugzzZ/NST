@@ -13,7 +13,7 @@ export default function StringField({
   
   const path=useContext(PathContext)
   // console.log(`${path}.${name}`)
-  console.log("[string]")
+  // console.log("[string]")
   return (
     <>
       {title ? title : null}

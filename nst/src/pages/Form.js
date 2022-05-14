@@ -3,8 +3,8 @@ import { useParams } from "react-router-dom"
 import { Paper, JSONSchemaForm, JSForm } from "../components"
 import { getForm, getFormdata } from "../requests"
 import { ObjectForm, MatrixForm, ArrayForm } from "../components/Form"
-import { ObjectField, StringField, ArrayField } from "../components/MyForm"
-import { StringInput, Card } from "../components/FormComponents"
+import { ObjectField, StringField, ArrayField, Field } from "../components/MyForm"
+import { StringInput, Card, Table } from "../components/FormComponents"
 
 export default function Form() {
   // const [data, setData] = useState(null);
@@ -35,39 +35,42 @@ export default function Form() {
       <ObjectField
         component={Card}
       >
-        <StringField
+        <Field
           name="myname"
+          title="name"
           component={StringInput}
         />
-        <StringField
+        <Field
           name="age"
+          title="age"
           component={StringInput}
         />
         <ObjectField
           name="location"
           component={Card}
         >
-          <StringField
+          <Field
             name="latitude"
+            title="latitude"
             component={StringInput}
           />
-          <StringField
+          <Field
             name="longitute"
+            title="longitute"
             component={StringInput}
           />
         </ObjectField>
       </ObjectField>
 
-
       <ArrayField
-        component={Card}
+        component={Table}
       >
         <ObjectField>
-          <StringField
+          <Field
             name="myname"
             component={StringInput}
           />
-          <StringField
+          <Field
             name="age"
             component={StringInput}
           />

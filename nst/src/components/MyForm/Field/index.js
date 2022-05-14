@@ -1,19 +1,29 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
+import PathContext from "../Context";
+import './index.css'
 
 export default function Field({
   title,
   name,
-  ancient = "",
-  component:Component,
+  component: Component,
 }) {
   const [formdata, setFormdata] = useState(null);
-  useEffect(() => {
-    setFormdata(Math.random().toFixed(2))
-  }, [])
+  // useEffect(() => {
+  //   setFormdata(Math.random().toFixed(2))
+  // }, [])
+
+  const path = useContext(PathContext)
+  console.log(`${path}.${name}`)
+  // console.log("[string]")
   return (
     <>
-      {title ? title : null}
-      <Component formdata={formdata}/>
+      {title ? (
+        <span
+          className="field-title"
+        >{title}</span>
+      )
+        : null}
+      <Component formdata={formdata} />
     </>
   )
 }
