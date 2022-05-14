@@ -7,11 +7,14 @@ export default function ArrayField({ name, children, component: Component }) {
     const path = useContext(PathContext)
     // console.log("[array]",React.Children.toArray(children))
     const { type } = children;
-    console.log(children)
+    // console.log(children)
+    let newChildren = null;
     if (type === ObjectField) {
-        console.log("ObjectField");
+        // console.log("ObjectField");
+        newChildren = children.props.children;
     } else if (type === Field) {
-        console.log("Field");
+        // console.log("Field");
+        newChildren = children;
     } else {
         throw new Error(`[TYPE ERROR] ${type.name}`)
     }
@@ -19,9 +22,9 @@ export default function ArrayField({ name, children, component: Component }) {
         <PathContext.Provider value={name ? `${path}.${name}` : path}>
             {Component ?
                 <Component>
-                    {children}
+                    {newChildren}
                 </Component>
-                : <>{ children }</>
+                : <>{newChildren}</>
             }
         </PathContext.Provider>
     )
