@@ -4,24 +4,28 @@ import ObjectField from "../ObejctField"
 import Field from "../Field"
 
 export default function ArrayField({ name, children, component: Component }) {
-    const path = useContext(PathContext)
-    // console.log("[array]",React.Children.toArray(children))
+    const context = useContext(PathContext)
+    console.log({...children},{ObjectField,Field})
     const { type } = children;
-    // console.log(children)
     let newChildren = null;
     if (type === ObjectField) {
-        // console.log("ObjectField");
         newChildren = children.props.children;
     } else if (type === Field) {
-        // console.log("Field");
         newChildren = children;
     } else {
         throw new Error(`[TYPE ERROR] ${type.name}`)
     }
     return (
-        <PathContext.Provider value={name ? `${path}.${name}` : path}>
+        <PathContext.Provider value={{
+            path: name ? `${context.path}.${name}` : context.path,
+        }}>
             {Component ?
-                <Component>
+                <Component
+                    formdata={[
+                        { "myname": "zzz", "age": 18 },
+                        { "myname": "ttt", "age": 20 }
+                    ]}
+                >
                     {newChildren}
                 </Component>
                 : <>{newChildren}</>

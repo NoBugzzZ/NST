@@ -1,4 +1,4 @@
 import { createContext } from "react";
-const PathContext=createContext("");
+const PathContext=createContext({path:""});
 
 export default PathContext;

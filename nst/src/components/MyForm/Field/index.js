@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react"
+import { useContext } from "react"
 import PathContext from "../Context";
 import './index.css'
 
@@ -6,15 +6,10 @@ export default function Field({
   title,
   name,
   component: Component,
-}) {
-  const [formdata, setFormdata] = useState(null);
-  // useEffect(() => {
-  //   setFormdata(Math.random().toFixed(2))
-  // }, [])
 
-  const path = useContext(PathContext)
-  console.log(`${path}.${name}`)
-  // console.log("[string]")
+}) {
+  const context = useContext(PathContext)
+  console.log(`field ${context.path}.${name}`)
   return (
     <>
       {title ? (
@@ -23,7 +18,7 @@ export default function Field({
         >{title}</span>
       )
         : null}
-      <Component formdata={formdata} />
+      <Component formdata={null} />
     </>
   )
 }

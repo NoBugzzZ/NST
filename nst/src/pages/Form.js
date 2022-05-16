@@ -30,6 +30,8 @@ export default function Form() {
   // }, [params])
   // console.log("render")
 
+  console.log(window)
+
   return (
     <Paper>
       <ObjectField
