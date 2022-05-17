@@ -1,11 +1,11 @@
 import React, { useContext } from "react"
-import PathContext from "../Context"
+import { PathContext } from "../Context"
 import ObjectField from "../ObejctField"
 import Field from "../Field"
 
 export default function ArrayField({ name, children, component: Component }) {
     const context = useContext(PathContext)
-    console.log({...children},{ObjectField,Field})
+    // console.log({...children},{ObjectField,Field})
     const { type } = children;
     let newChildren = null;
     if (type === ObjectField) {

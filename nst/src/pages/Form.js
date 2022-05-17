@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react"
-import { useParams } from "react-router-dom"
+import React from "react"
+// import { useParams } from "react-router-dom"
 import { Paper, JSONSchemaForm, JSForm } from "../components"
-import { getForm, getFormdata } from "../requests"
-import { ObjectForm, MatrixForm, ArrayForm } from "../components/Form"
-import { ObjectField, StringField, ArrayField, Field } from "../components/MyForm"
+// import { getForm, getFormdata } from "../requests"
+// import { ObjectForm, MatrixForm, ArrayForm } from "../components/Form"
+import { ObjectField, StringField, ArrayField, Field, MyForm } from "../components/MyForm"
 import { StringInput, Card, Table } from "../components/FormComponents"
 
 export default function Form() {
@@ -30,41 +30,107 @@ export default function Form() {
   // }, [params])
   // console.log("render")
 
-  console.log(window)
+  // console.log(window)
 
   return (
     <Paper>
-      <ObjectField
-        component={Card}
+      <MyForm
+        initialFormdata={{
+          "firstname": "zz",
+          "lastname": "t",
+          "birthday": 1998,
+          "detail": {
+            "firstname": "zz",
+            "lastname": "t",
+            "birthday": 1998,
+          }
+        }}
+        mapper={[
+          {
+            source: [".lastname", ".firstname"],
+            target: [".name"],
+            expression: (lastname, firstname) => `${lastname} ${firstname}`
+          },
+          {
+            source: [".birthday"],
+            target: [".age"],
+            expression: (birthday) => new Date().getFullYear() - birthday
+          },
+          {
+            source: [".detail.lastname", ".detail.firstname"],
+            target: [".detail.name"],
+            expression: (lastname, firstname) => `${lastname} ${firstname}`
+          },
+          {
+            source: [".detail.birthday"],
+            target: [".detail.age"],
+            expression: (birthday) => new Date().getFullYear() - birthday
+          }
+        ]}
       >
-        <Field
-          name="myname"
-          title="name"
-          component={StringInput}
-        />
-        <Field
-          name="age"
-          title="age"
-          component={StringInput}
-        />
         <ObjectField
-          name="location"
           component={Card}
         >
           <Field
-            name="latitude"
-            title="latitude"
+            name="firstname"
+            title="firstname"
             component={StringInput}
           />
           <Field
-            name="longitute"
-            title="longitute"
+            name="lastname"
+            title="lastname"
             component={StringInput}
           />
+          <Field
+            name="name"
+            title="name"
+            component={StringInput}
+          />
+          <Field
+            name="birthday"
+            title="birthday"
+            component={StringInput}
+          />
+          <Field
+            name="age"
+            title="age"
+            component={StringInput}
+          />
+          <ObjectField
+            name="detail"
+            component={Card}
+          >
+            <Field
+              name="firstname"
+              title="firstname"
+              component={StringInput}
+            />
+            <Field
+              name="lastname"
+              title="lastname"
+              component={StringInput}
+            />
+            <Field
+              name="name"
+              title="name"
+              component={StringInput}
+            />
+            <Field
+              name="birthday"
+              title="birthday"
+              component={StringInput}
+            />
+            <Field
+              name="age"
+              title="age"
+              component={StringInput}
+            />
+          </ObjectField>
         </ObjectField>
-      </ObjectField>
+      </MyForm>
 
-      <ArrayField
+
+      {/* <ArrayField
         component={Table}
       >
         <ObjectField>
@@ -77,7 +143,7 @@ export default function Form() {
             component={StringInput}
           />
         </ObjectField>
-      </ArrayField>
+      </ArrayField> */}
       {/* {JSON.stringify(schema)} */}
       {/* <JSONSchemaForm
         schema={data?.schema}

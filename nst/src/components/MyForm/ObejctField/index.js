@@ -1,5 +1,5 @@
 import React, { useContext } from "react"
-import PathContext from "../Context"
+import { PathContext } from "../Context"
 
 export default function ObjectField({ name, children, component: Component }) {
     const context = useContext(PathContext);

@@ -1,8 +1,10 @@
-import React from "react"
+import React, { useContext } from "react"
 import './index.css'
+import { PathContext } from "../../MyForm";
 
 export default function Table({ children, formdata = [] }) {
   // console.log(children, formdata)
+  const pathContext = useContext(PathContext);
   const newChildren = React.Children
     .toArray(children);
   const getHead = () => {
@@ -18,21 +20,25 @@ export default function Table({ children, formdata = [] }) {
     return <tr>{res}</tr>;
   }
   const getBody = () => {
-    const res = formdata.map((d,i) => {
+    const res = formdata.map((_, i) => {
       return (
-        <tr
+        <PathContext.Provider value={{
+          path: `${pathContext.path}[${i}]`
+        }}
           key={i}
         >
-          {
-            newChildren.map((child, index) => (
-              <td
-                key={index}
-              >
-                {child}
-              </td>
-            ))
-          }
-        </tr>
+          <tr>
+            {
+              newChildren.map((child, index) => (
+                <td
+                  key={index}
+                >
+                  {child}
+                </td>
+              ))
+            }
+          </tr>
+        </PathContext.Provider>
       )
     });
     return res;

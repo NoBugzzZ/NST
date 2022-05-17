@@ -1,5 +1,10 @@
-export default function StringInput({ formdata }) {
+export default function StringInput({ formdata,onChange=()=>{} }) {
     return (
-        <input defaultValue={formdata ? formdata : ""}></input>
+        <input
+            value={formdata ? formdata : ""}
+            onChange={(e)=>{
+                onChange(e.target.value)
+            }}
+        ></input>
     )
 }

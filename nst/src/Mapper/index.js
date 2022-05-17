@@ -1,10 +1,45 @@
 var _ = require("lodash")
 
+function setDataByPath(path = "root", value, formdata) {
+  const paths = path.split(".");
+  if (paths.length === 1) formdata = value;
+  formdata = formdata ? formdata : {};
+  let temp = formdata;
+  const len = paths.length;
+  for (let i = 1; i < len; i++) {
+    let key = paths[i];
+    if ((len - 1) === i) temp[key] = value;
+    else {
+      if (key in temp) temp = temp[key];
+      else {
+        temp[key] = {};
+        temp = temp[key];
+      }
+    }
+  }
+  return formdata;
+}
+function getDataByPath(path, formdata) {
+  const paths = path.split(".");
+  if (paths.length === 1) return formdata;
+  let temp = formdata;
+  const len = paths.length;
+  for (let i = 1; i < len; i++) {
+    let key = paths[i];
+    if ((len - 1) === i) return temp[key];
+    else {
+      temp = temp[key];
+      if (!temp) return undefined;
+    }
+  }
+  return formdata;
+}
+
 class Mapper {
-  constructor(mapper) {
+  constructor(mapper = []) {
     this.mapper = mapper;
     this.graph = this.constructDependencyGraph(mapper);
-    console.log(this.graph);
+    // console.log(this.graph);
   }
   constructDependencyGraph(mapper) {
     const graph = {}
@@ -19,12 +54,15 @@ class Mapper {
     })
     return graph;
   }
-  changeFormdata(event) {
-    return this.setDataByPath(event.path, event.value, this.formdata);
+  changeFormdata(event, formdata) {
+    return setDataByPath(event.path, event.value, formdata);
   }
-  transform(events) {
+  transform(events, formdata) {
+    const changes = []
+    let newFormdata = formdata;
     events.forEach(event => {
-      this.formdata = this.changeFormdata(event);
+      newFormdata = this.changeFormdata(event, formdata);
+      changes.push(event);
     })
 
     const depsSet = new Set();
@@ -37,19 +75,18 @@ class Mapper {
       }
     })
 
-    const changes = []
     nextdep: for (let dep of depsSet) {
       const { source, target, expression } = dep
       const sourceData = [];
       for (let s of source) {
-        const d = this.getDataByPath(s, this.formdata);
+        const d = getDataByPath(s, newFormdata);
         if (d === null || d === undefined) break nextdep;
         sourceData.push(d);
       }
       const computedData = expression.apply(null, sourceData);
       target.forEach(t => {
         changes.push({ path: t, value: computedData });
-        this.formdata = this.setDataByPath(t, computedData, this.formdata);
+        newFormdata = setDataByPath(t, computedData, newFormdata);
       })
     }
     return changes;
@@ -61,7 +98,7 @@ class Mapper {
         const { source, target, expression } = currentValue;
         const sourceData = [];
         for (let s of source) {
-          const d = this.getDataByPath(s, oldData);
+          const d = getDataByPath(s, oldData);
           if (d === null || d === undefined) return previousValue;
           sourceData.push(d);
         }
@@ -73,110 +110,78 @@ class Mapper {
     derivedData.forEach(d => {
       const { target, computedData } = d;
       target.forEach(t => {
-        this.setDataByPath(t, computedData, newData);
+        setDataByPath(t, computedData, newData);
       })
     })
-    this.formdata = newData;
     return newData;
   }
-  setDataByPath(path = "root", value, formdata) {
-    const paths = path.split(".");
-    if (paths.length === 1) formdata = value;
-    formdata = formdata ? formdata : {};
-    let temp = formdata;
-    const len = paths.length;
-    for (let i = 1; i < len; i++) {
-      let key = paths[i];
-      if ((len - 1) === i) temp[key] = value;
-      else {
-        if (key in temp) temp = temp[key];
-        else {
-          temp[key] = {};
-          temp = temp[key];
-        }
-      }
-    }
-    return formdata;
-  }
-  getDataByPath(path, formdata) {
-    const paths = path.split(".");
-    if (paths.length === 1) return formdata;
-    let temp = formdata;
-    const len = paths.length;
-    for (let i = 1; i < len; i++) {
-      let key = paths[i];
-      if ((len - 1) === i) return temp[key];
-      else {
-        temp = temp[key];
-        if (!temp) return undefined;
-      }
-    }
-    return formdata;
-  }
 }
 
 
-const mapper = new Mapper([
-  {
-    source: ["root.lastname", "root.firstname"],
-    target: ["root.name"],
-    expression: (lastname, firstname) => `${lastname} ${firstname}`
-  },
-  {
-    source: ["root.birthday"],
-    target: ["root.age"],
-    expression: (birthday) => new Date().getFullYear() - birthday
-  }
-])
+// export default Mapper;
 
-const formdata = mapper.initializeFormdata({
-  lastname: "t",
-  firstname: "z",
-  birthday: 1998
-})
-console.log(formdata)
+// const mapper = new Mapper([
+//   {
+//     source: ["root.lastname", "root.firstname"],
+//     target: ["root.name"],
+//     expression: (lastname, firstname) => `${lastname} ${firstname}`
+//   },
+//   {
+//     source: ["root.birthday"],
+//     target: ["root.age"],
+//     expression: (birthday) => new Date().getFullYear() - birthday
+//   }
+// ])
 
-console.log(mapper.transform([
-  {
-    path: "root.birthday",
-    value: 1999
-  },
-  {
-    path: "root.lastname",
-    value: "tang"
-  },
-  {
-    path: "root.firstname",
-    value: "zheng"
-  }
-]))
+// const formdata = mapper.initializeFormdata({
+//   lastname: "t",
+//   firstname: "z",
+//   birthday: 1998
+// })
+// console.log(formdata)
 
-function debounce(func, ms) {
-  let timer;
-  return function (...args) {
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-      func.apply(this, args);
-    }, ms)
-  }
-}
+// console.log(mapper.transform([
+//   {
+//     path: "root.birthday",
+//     value: 1999
+//   },
+//   {
+//     path: "root.lastname",
+//     value: "tang"
+//   }
+// ], formdata))
 
-class Event {
-  constructor(mapper, formdata) {
+// function debounce(func, ms) {
+//   let timer;
+//   return function (...args) {
+//     clearTimeout(timer);
+//     timer = setTimeout(() => {
+//       func.apply(this, args);
+//     }, ms)
+//   }
+// }
+
+class MyEvent {
+  constructor(mapper = [], formdata = {}) {
     this.mapper = new Mapper(mapper);
-    this.formdata = mapper.initializeFormdata(formdata);
+    this.formdata = this.mapper.initializeFormdata(formdata);
     this.subscriber = {};
-    this.queue = {};
-    this.transform = debounce(this.mapper.transform.bind(this.mapper), 1000)
   }
-  changeFormdata() {
-    const transforms = this.transform(Object.values(this.queue));
+  getData(path){
+    return getDataByPath(path,this.formdata);
   }
   publish(path, value) {
-    this.queue[path] = {
-      path,
-      value,
-    }
+    const changes = this.mapper.transform([{ path, value }], this.formdata);
+    // console.log(changes)
+    changes.forEach(({ path }) => {
+      if (this.subscriber[path]) {
+        this.subscriber[path].forEach(sub => {
+          const { paths, callback } = sub;
+          const values = paths.map(p => getDataByPath(p, this.formdata));
+          callback(...values)
+        })
+      }
+    })
   }
   subscribe(paths, callback) {
     paths.forEach(path => {
@@ -186,4 +191,49 @@ class Event {
       this.subscriber[path].push({ callback, paths });
     })
   }
+  unsubscribe(paths, callback) {
+    paths.forEach(path => {
+      if (!this.subscriber[path]) return;
+      const index = this.subscriber[path].findIndex(sub => sub.callback === callback);
+      this.subscriber[path].splice(index, 1);
+    })
+  }
 }
+
+export default MyEvent;
+
+// const event = new Event([
+//   {
+//     source: [".lastname", ".firstname"],
+//     target: [".name"],
+//     expression: (lastname, firstname) => `${lastname} ${firstname}`
+//   },
+//   {
+//     source: [".birthday"],
+//     target: [".age"],
+//     expression: (birthday) => new Date().getFullYear() - birthday
+//   }
+// ])
+
+
+// console.log(event.formdata)
+
+// event.subscribe([".lastname"],(lastname)=>{
+//   console.log(`[lastname] ${lastname}`)
+// })
+// event.subscribe([".firstname"],(firstname)=>{
+//   console.log(`[firstname] ${firstname}`)
+// })
+// event.subscribe([".birthday"],(birthday)=>{
+//   console.log(`[birthday] ${birthday}`)
+// })
+// event.subscribe([".name"],(name)=>{
+//   console.log(`[name] ${name}`)
+// })
+// event.subscribe([".age"],(age)=>{
+//   console.log(`[age] ${age}`)
+// })
+
+// event.publish(".lastname","tang")
+// event.publish(".birthday",1997)
+// event.publish(".firstname","zheng")
