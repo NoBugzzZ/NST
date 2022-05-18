@@ -23,7 +23,7 @@ export default function Table({ children, formdata = [] }) {
     const res = formdata.map((_, i) => {
       return (
         <PathContext.Provider value={{
-          path: `${pathContext.path}[${i}]`
+          path: `${pathContext.path}.[${i}]`
         }}
           key={i}
         >

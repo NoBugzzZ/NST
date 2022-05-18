@@ -1,10 +1,13 @@
 import React, { useContext } from "react"
-import { PathContext } from "../Context"
+import { PathContext, EventContext } from "../Context"
 import ObjectField from "../ObejctField"
 import Field from "../Field"
+import useField from "../Hook/useField"
 
 export default function ArrayField({ name, children, component: Component }) {
-    const context = useContext(PathContext)
+    const { path } = useContext(PathContext);
+    const { event } = useContext(EventContext);
+    const formdata=useField(event,`${path}.${name}`);
     // console.log({...children},{ObjectField,Field})
     const { type } = children;
     let newChildren = null;
@@ -17,14 +20,11 @@ export default function ArrayField({ name, children, component: Component }) {
     }
     return (
         <PathContext.Provider value={{
-            path: name ? `${context.path}.${name}` : context.path,
+            path: name ? `${path}.${name}` : path,
         }}>
             {Component ?
                 <Component
-                    formdata={[
-                        { "myname": "zzz", "age": 18 },
-                        { "myname": "ttt", "age": 20 }
-                    ]}
+                    formdata={formdata}
                 >
                     {newChildren}
                 </Component>

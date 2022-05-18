@@ -8,12 +8,24 @@ function setDataByPath(path = "root", value, formdata) {
   const len = paths.length;
   for (let i = 1; i < len; i++) {
     let key = paths[i];
-    if ((len - 1) === i) temp[key] = value;
+    if ((len - 1) === i) {
+      if (Array.isArray(temp)) {
+        const index = Number(key.match(/\d/g));
+        temp[index] = value;
+      } else {
+        temp[key] = value;
+      }
+    }
     else {
-      if (key in temp) temp = temp[key];
-      else {
-        temp[key] = {};
-        temp = temp[key];
+      if (Array.isArray(temp)) {
+        const index = Number(key.match(/\d/g));
+        temp = temp[index];
+      } else {
+        if (key in temp) temp = temp[key];
+        else {
+          temp[key] = {};
+          temp = temp[key];
+        }
       }
     }
   }
@@ -26,9 +38,22 @@ function getDataByPath(path, formdata) {
   const len = paths.length;
   for (let i = 1; i < len; i++) {
     let key = paths[i];
-    if ((len - 1) === i) return temp[key];
+    if ((len - 1) === i) {
+      if (Array.isArray(temp)) {
+        const index = Number(key.match(/\d/g));
+        temp = temp[index];
+      } else {
+        temp = temp[key];
+      }
+      return temp;
+    }
     else {
-      temp = temp[key];
+      if (Array.isArray(temp)) {
+        const index = Number(key.match(/\d/g));
+        temp = temp[index];
+      } else {
+        temp = temp[key];
+      }
       if (!temp) return undefined;
     }
   }
@@ -167,8 +192,8 @@ class MyEvent {
     this.formdata = this.mapper.initializeFormdata(formdata);
     this.subscriber = {};
   }
-  getData(path){
-    return getDataByPath(path,this.formdata);
+  getData(path) {
+    return getDataByPath(path, this.formdata);
   }
   publish(path, value) {
     const changes = this.mapper.transform([{ path, value }], this.formdata);

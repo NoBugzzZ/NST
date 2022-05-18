@@ -4,7 +4,7 @@ import { Paper, JSONSchemaForm, JSForm } from "../components"
 // import { getForm, getFormdata } from "../requests"
 // import { ObjectForm, MatrixForm, ArrayForm } from "../components/Form"
 import { ObjectField, StringField, ArrayField, Field, MyForm } from "../components/MyForm"
-import { StringInput, Card, Table } from "../components/FormComponents"
+import { StringInput, Card, Table,List } from "../components/FormComponents"
 
 export default function Form() {
   // const [data, setData] = useState(null);
@@ -43,7 +43,15 @@ export default function Form() {
             "firstname": "zz",
             "lastname": "t",
             "birthday": 1998,
-          }
+          },
+          "table":[
+            {"name":"t","age":24},
+            {"name":"z","age":24},
+          ],
+          "list":[
+            {"name":"t","age":24},
+            {"name":"z","age":24},
+          ]
         }}
         mapper={[
           {
@@ -126,24 +134,38 @@ export default function Form() {
               component={StringInput}
             />
           </ObjectField>
+          <ArrayField
+            component={Table}
+            name="table"
+          >
+            <ObjectField>
+              <Field
+                name="name"
+                component={StringInput}
+              />
+              <Field
+                name="age"
+                component={StringInput}
+              />
+            </ObjectField>
+          </ArrayField>
+          <ArrayField
+            component={List}
+            name="list"
+          >
+            <ObjectField>
+              <Field
+                name="name"
+                component={StringInput}
+              />
+              <Field
+                name="age"
+                component={StringInput}
+              />
+            </ObjectField>
+          </ArrayField>
         </ObjectField>
       </MyForm>
-
-
-      {/* <ArrayField
-        component={Table}
-      >
-        <ObjectField>
-          <Field
-            name="myname"
-            component={StringInput}
-          />
-          <Field
-            name="age"
-            component={StringInput}
-          />
-        </ObjectField>
-      </ArrayField> */}
       {/* {JSON.stringify(schema)} */}
       {/* <JSONSchemaForm
         schema={data?.schema}

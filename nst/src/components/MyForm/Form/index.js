@@ -1,5 +1,6 @@
 import { PathContext, EventContext } from "../Context";
 import useForm from "../Hook/useForm";
+import { Submit } from "../../FormComponents";
 
 export default function MyForm({ children, initialFormdata, mapper = [] }) {
 
@@ -17,9 +18,13 @@ export default function MyForm({ children, initialFormdata, mapper = [] }) {
                     {children}
                 </PathContext.Provider>
             }
+            <Submit
+                onClick={() => {
+                    if (event) {
+                        alert(JSON.stringify(event.getData(""), null, 2))
+                    }
+                }}
+            />
         </>
-
-
-
     )
 }
