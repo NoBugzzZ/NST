@@ -51,6 +51,14 @@ export default function Form() {
           "list": [
             { "name": "t", "age": 24, "detail": { "name": "zz", "age": 11 } },
             { "name": "t", "age": 24, "detail": { "name": "zz", "age": 11 } },
+          ],
+          "table1": [
+            [{ "name": "t", "age": 24 }],
+            [{ "name": "t", "age": 24 }]
+          ],
+          "list1": [
+            [{ "name": "t", "age": 24 }],
+            [{ "name": "t", "age": 24 }]
           ]
         }}
         mapper={[
@@ -164,13 +172,12 @@ export default function Form() {
             </ObjectField>
           </ArrayField>
 
-          {/* <ArrayField
+          <ArrayField
             component={Table}
             name="table1"
           >
             <ArrayField
               component={Table}
-              name="table2"
             >
               <ObjectField>
                 <Field
@@ -183,7 +190,7 @@ export default function Form() {
                 />
               </ObjectField>
             </ArrayField>
-          </ArrayField> */}
+          </ArrayField>
 
           <ArrayField
             component={List}
@@ -219,6 +226,31 @@ export default function Form() {
               </ObjectField>
             </ObjectField>
           </ArrayField>
+
+          <ArrayField
+            component={List}
+            name="list1"
+          >
+            <ArrayField
+              component={List}
+            >
+              <ObjectField
+                component={Card}
+              >
+                <Field
+                  name="name"
+                  title="name"
+                  component={StringInput}
+                />
+                <Field
+                  name="age"
+                  title="age"
+                  component={StringInput}
+                />
+              </ObjectField>
+            </ArrayField>
+          </ArrayField>
+
         </ObjectField>
       </MyForm>
       {/* {JSON.stringify(schema)} */}

@@ -7,16 +7,11 @@ import useField from "../Hook/useField"
 export default function ArrayField({ name, children, component: Component }) {
     const { path } = useContext(PathContext);
     const { event } = useContext(EventContext);
-    const formdata=useField(event,`${path}.${name}`);
-    // console.log({...children},{ObjectField,Field})
-    // const addFormdata=useCallback(()=>{
-    //     if(event){
-    //         event.publish(`${path}.${name}`,value)
-    //       }
-    // },[])
+    const newPath = name ? `${path}.${name}` : path;
+    const formdata = useField(event, newPath);
     return (
         <PathContext.Provider value={{
-            path: name ? `${path}.${name}` : path,
+            path: newPath
         }}>
             {Component ?
                 <Component

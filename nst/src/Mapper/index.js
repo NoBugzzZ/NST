@@ -197,7 +197,6 @@ class MyEvent {
   }
   publish(path, value) {
     const changes = this.mapper.transform([{ path, value }], this.formdata);
-    // console.log(changes)
     changes.forEach(({ path }) => {
       if (this.subscriber[path]) {
         this.subscriber[path].forEach(sub => {

@@ -29,6 +29,7 @@ export default function Field({
   // }, [event])
   const formdata=useField(event,`${path}.${name}`);
   // console.log(`[${path}.${name}] ${formdata}`)
+  // console.log(`${path}.${name}`,formdata)
   return (
     <>
       <Title title={title}/>

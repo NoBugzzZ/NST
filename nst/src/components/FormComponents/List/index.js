@@ -3,7 +3,7 @@ import { PathContext } from "../../MyForm"
 import './index.css'
 
 export default function List({ children, formdata }) {
-  console.log(children, formdata)
+  // console.log(children, formdata)
   const pathContext = useContext(PathContext);
   return (
     <div
