@@ -4,6 +4,7 @@ import Table from "./Table";
 import Title from "./Title";
 import Submit from "./Submit";
 import List from "./List";
+import NumberInput from "./NumberInput";
 
 export {
     StringInput,
@@ -12,4 +13,5 @@ export {
     Title,
     Submit,
     List,
+    NumberInput,
 }

@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React, { useCallback, useContext } from "react"
 import { PathContext, EventContext } from "../Context"
 import ObjectField from "../ObejctField"
 import Field from "../Field"
@@ -9,15 +9,11 @@ export default function ArrayField({ name, children, component: Component }) {
     const { event } = useContext(EventContext);
     const formdata=useField(event,`${path}.${name}`);
     // console.log({...children},{ObjectField,Field})
-    const { type } = children;
-    let newChildren = null;
-    if (type === ObjectField) {
-        newChildren = children.props.children;
-    } else if (type === Field) {
-        newChildren = children;
-    } else {
-        throw new Error(`[TYPE ERROR] ${type.name}`)
-    }
+    // const addFormdata=useCallback(()=>{
+    //     if(event){
+    //         event.publish(`${path}.${name}`,value)
+    //       }
+    // },[])
     return (
         <PathContext.Provider value={{
             path: name ? `${path}.${name}` : path,
@@ -26,9 +22,9 @@ export default function ArrayField({ name, children, component: Component }) {
                 <Component
                     formdata={formdata}
                 >
-                    {newChildren}
+                    {children}
                 </Component>
-                : <>{newChildren}</>
+                : <>{children}</>
             }
         </PathContext.Provider>
     )

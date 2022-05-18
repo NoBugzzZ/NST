@@ -4,7 +4,7 @@ import { Paper, JSONSchemaForm, JSForm } from "../components"
 // import { getForm, getFormdata } from "../requests"
 // import { ObjectForm, MatrixForm, ArrayForm } from "../components/Form"
 import { ObjectField, StringField, ArrayField, Field, MyForm } from "../components/MyForm"
-import { StringInput, Card, Table,List } from "../components/FormComponents"
+import { StringInput, Card, Table, List, NumberInput } from "../components/FormComponents"
 
 export default function Form() {
   // const [data, setData] = useState(null);
@@ -44,13 +44,13 @@ export default function Form() {
             "lastname": "t",
             "birthday": 1998,
           },
-          "table":[
-            {"name":"t","age":24},
-            {"name":"z","age":24},
+          "table": [
+            { "name": "t", "age": 24, "detail": { "name": "zz", "age": 11, "table": [{ "name": "zz", "age": 11 }] } },
+            { "name": "t", "age": 24, "detail": { "name": "zz", "age": 11, "table": [{ "name": "zz", "age": 11 }] } },
           ],
-          "list":[
-            {"name":"t","age":24},
-            {"name":"z","age":24},
+          "list": [
+            { "name": "t", "age": 24, "detail": { "name": "zz", "age": 11 } },
+            { "name": "t", "age": 24, "detail": { "name": "zz", "age": 11 } },
           ]
         }}
         mapper={[
@@ -97,43 +97,27 @@ export default function Form() {
           <Field
             name="birthday"
             title="birthday"
-            component={StringInput}
+            component={NumberInput}
           />
           <Field
             name="age"
             title="age"
-            component={StringInput}
+            component={NumberInput}
           />
+
+
           <ObjectField
             name="detail"
             component={Card}
           >
             <Field
-              name="firstname"
-              title="firstname"
-              component={StringInput}
-            />
-            <Field
-              name="lastname"
-              title="lastname"
-              component={StringInput}
-            />
-            <Field
               name="name"
               title="name"
               component={StringInput}
             />
-            <Field
-              name="birthday"
-              title="birthday"
-              component={StringInput}
-            />
-            <Field
-              name="age"
-              title="age"
-              component={StringInput}
-            />
           </ObjectField>
+
+
           <ArrayField
             component={Table}
             name="table"
@@ -147,21 +131,92 @@ export default function Form() {
                 name="age"
                 component={StringInput}
               />
+              <ObjectField
+                component={Card}
+                name="detail"
+              >
+                <Field
+                  name="name"
+                  title="name"
+                  component={StringInput}
+                />
+                <Field
+                  name="age"
+                  title="age"
+                  component={StringInput}
+                />
+                <ArrayField
+                  component={Table}
+                  name="table"
+                >
+                  <ObjectField>
+                    <Field
+                      name="name"
+                      component={StringInput}
+                    />
+                    <Field
+                      name="age"
+                      component={StringInput}
+                    />
+                  </ObjectField>
+                </ArrayField>
+              </ObjectField>
             </ObjectField>
           </ArrayField>
+
+          {/* <ArrayField
+            component={Table}
+            name="table1"
+          >
+            <ArrayField
+              component={Table}
+              name="table2"
+            >
+              <ObjectField>
+                <Field
+                  name="name"
+                  component={StringInput}
+                />
+                <Field
+                  name="age"
+                  component={StringInput}
+                />
+              </ObjectField>
+            </ArrayField>
+          </ArrayField> */}
+
           <ArrayField
             component={List}
             name="list"
           >
-            <ObjectField>
+            <ObjectField
+              component={Card}
+            >
               <Field
                 name="name"
+                title="name"
                 component={StringInput}
               />
               <Field
                 name="age"
+                title="age"
                 component={StringInput}
               />
+              <ObjectField
+                component={Card}
+                name="detail"
+              >
+                <Field
+                  name="name"
+                  title="name"
+                  component={StringInput}
+                />
+                <Field
+                  name="age"
+                  title="age"
+                  component={StringInput}
+                />
+              </ObjectField>
             </ObjectField>
           </ArrayField>
         </ObjectField>
