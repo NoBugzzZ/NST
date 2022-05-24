@@ -1,10 +1,14 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 // import { useParams } from "react-router-dom"
 import { Paper, JSONSchemaForm, JSForm } from "../components"
 // import { getForm, getFormdata } from "../requests"
 // import { ObjectForm, MatrixForm, ArrayForm } from "../components/Form"
 import { ObjectField, StringField, ArrayField, Field, MyForm } from "../components/MyForm"
 import { StringInput, Card, Table, List, NumberInput } from "../components/FormComponents"
+import ReactDataSheet from 'react-datasheet';
+// Be sure to include styles at some point, probably during your bootstrapping
+import 'react-datasheet/lib/react-datasheet.css';
+import { constructSchemaWithUI } from "../Transform/utils";
 
 export default function Form() {
   // const [data, setData] = useState(null);
@@ -31,10 +35,90 @@ export default function Form() {
   // console.log("render")
 
   // console.log(window)
+  const CELL_OPTION = { width: "100px" }
+  const [grid, setGrid] = useState([
+    [{ value: 1, ...CELL_OPTION }, { value: 3, ...CELL_OPTION }],
+    [{ value: 2, ...CELL_OPTION }, { value: 4, ...CELL_OPTION }],
+  ])
+
+  useEffect(() => {
+    setGrid(grid)
+
+    const data={ 
+      "name": "tz", 
+      "age": "24", 
+      "password": "123456" 
+    }
+
+    const schema = {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "age": {
+          "type": "number"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    }
+    const uischema = {
+      "name": {
+        "ui:location": {
+          "row": 1,
+          "col": 1,
+        }
+      },
+      "age": {
+        "ui:location": {
+          "row": 1,
+          "col": 2,
+        }
+      },
+      "password": {
+        "ui:location": {
+          "row": 1,
+          "col": 3,
+        }
+      }
+    }
+
+    const authentication = {
+      "tz": {
+        "name": "rw",
+        "age": "r-",
+        "password": "--"
+      },
+      "zz": {
+        "name": "rw",
+        "age": "rw",
+        "password": "r-"
+      }
+    }
+
+    console.log(constructSchemaWithUI(schema,uischema))
+
+  }, [])
 
   return (
     <Paper>
-      <MyForm
+
+      <ReactDataSheet
+        data={grid}
+        valueRenderer={cell => cell.value}
+        onCellsChanged={changes => {
+          setGrid(prevGrid => {
+            const nextGrid = prevGrid.map(row => [...row]);
+            changes.forEach(({ cell, row, col, value }) => {
+              nextGrid[row][col] = { ...nextGrid[row][col], value };
+            })
+            return nextGrid;
+          })
+        }}
+      />
+      {/* <MyForm
         initialFormdata={{
           "firstname": "zz",
           "lastname": "t",
@@ -252,7 +336,7 @@ export default function Form() {
           </ArrayField>
 
         </ObjectField>
-      </MyForm>
+      </MyForm> */}
       {/* {JSON.stringify(schema)} */}
       {/* <JSONSchemaForm
         schema={data?.schema}
