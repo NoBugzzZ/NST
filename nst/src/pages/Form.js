@@ -8,7 +8,7 @@ import { StringInput, Card, Table, List, NumberInput } from "../components/FormC
 import ReactDataSheet from 'react-datasheet';
 // Be sure to include styles at some point, probably during your bootstrapping
 import 'react-datasheet/lib/react-datasheet.css';
-import { constructSchemaWithUI } from "../Transform/utils";
+import { constructSchemaWithUI, constructSchemaWithAuth, constructGrid } from "../Transform/utils";
 
 export default function Form() {
   // const [data, setData] = useState(null);
@@ -44,10 +44,10 @@ export default function Form() {
   useEffect(() => {
     setGrid(grid)
 
-    const data={ 
-      "name": "tz", 
-      "age": "24", 
-      "password": "123456" 
+    const formdata = {
+      "name": "tz",
+      "age": "24",
+      "password": "123456"
     }
 
     const schema = {
@@ -97,9 +97,12 @@ export default function Form() {
         "password": "r-"
       }
     }
-
-    console.log(constructSchemaWithUI(schema,uischema))
-
+    const schemaWithUi = constructSchemaWithUI(schema, uischema)
+    const schemaWithAuth = constructSchemaWithAuth(schemaWithUi, authentication["tz"]);
+    console.log(schemaWithAuth);
+    const g = constructGrid(schemaWithAuth, formdata);
+    console.log(g);
+    setGrid(g);
   }, [])
 
   return (
