@@ -5,9 +5,9 @@ import { Paper, JSONSchemaForm, JSForm } from "../components"
 // import { ObjectForm, MatrixForm, ArrayForm } from "../components/Form"
 import { ObjectField, StringField, ArrayField, Field, MyForm } from "../components/MyForm"
 import { StringInput, Card, Table, List, NumberInput } from "../components/FormComponents"
-import ReactDataSheet from 'react-datasheet';
+import ReactDataSheet, { Sheet } from '../components/react-datasheet/src/index.js';
 // Be sure to include styles at some point, probably during your bootstrapping
-import 'react-datasheet/lib/react-datasheet.css';
+import '../components/react-datasheet/src/react-datasheet.css';
 import { constructSchemaWithUI, constructSchemaWithAuth, constructGrid } from "../Transform/utils";
 
 export default function Form() {
