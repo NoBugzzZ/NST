@@ -88,8 +88,33 @@ function addCellToGrid(grid, rowIndex, colIndex, cell) {
     return grid;
   }
 
+function reduceDimension(data,dimension){
+    let lowDimensionData=[data];
+    for(let i=dimension;i>2;i--){
+        for(let j=0,len=lowDimensionData.length;j<len;j++){
+            const d=lowDimensionData.shift();
+            for(let value of Object.values(d)){
+                lowDimensionData.push(value);
+            }
+        }
+    }
+    let res=[];
+    lowDimensionData.forEach(d=>{
+        for(let value of Object.values(d)){
+            const row=[];
+            for(let v of Object.values(value)){
+                row.push(v);
+            }
+            res.push(row);
+        }
+        
+    })
+    return res;
+}
+
 export {
     constructSchemaWithUI,
     constructSchemaWithAuth,
     constructGrid,
+    reduceDimension
 }

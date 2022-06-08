@@ -8,7 +8,7 @@ import { StringInput, Card, Table, List, NumberInput } from "../components/FormC
 import ReactDataSheet, { Sheet } from '../components/react-datasheet/src/index.js';
 // Be sure to include styles at some point, probably during your bootstrapping
 import '../components/react-datasheet/src/react-datasheet.css';
-import { constructSchemaWithUI, constructSchemaWithAuth, constructGrid } from "../Transform/utils";
+import { constructSchemaWithUI, constructSchemaWithAuth, constructGrid, reduceDimension } from "../Transform/utils";
 
 export default function Form() {
   // const [data, setData] = useState(null);
@@ -40,6 +40,8 @@ export default function Form() {
     [{ value: 1, ...CELL_OPTION }, { value: 3, ...CELL_OPTION }],
     [{ value: 2, ...CELL_OPTION }, { value: 4, ...CELL_OPTION }],
   ])
+
+  const [table, setTable] = useState([]);
 
   useEffect(() => {
     setGrid(grid)
@@ -86,6 +88,7 @@ export default function Form() {
     }
 
     const authentication = {
+
       "tz": {
         "name": "rw",
         "age": "r-",
@@ -97,12 +100,48 @@ export default function Form() {
         "password": "r-"
       }
     }
+
     const schemaWithUi = constructSchemaWithUI(schema, uischema)
     const schemaWithAuth = constructSchemaWithAuth(schemaWithUi, authentication["tz"]);
     console.log(schemaWithAuth);
     const g = constructGrid(schemaWithAuth, formdata);
     console.log(g);
     setGrid(g);
+
+
+    const highDimension = {
+      "2022": {
+        "1-1": {
+          "南京": 236.6,
+          "无锡": 133.9,
+          "徐州": 49.1
+        },
+        "1-2": {
+          "南京": 236.1,
+          "无锡": 116.0,
+          "徐州": 40.1
+        }
+      },
+      "2021": {
+        "1-1": {
+          "南京": 237.1,
+          "无锡": 136.9,
+          "徐州": 0
+        },
+        "1-2": {
+          "南京": 237.1,
+          "无锡": 127.9,
+          "徐州": 0
+        }
+      }
+    }
+
+    const reducedData = reduceDimension(highDimension, 3);
+    const reducedDataGrid = reducedData.map(row => {
+      return row.map(d => ({ value: d, ...CELL_OPTION }))
+    })
+    console.log(reducedDataGrid)
+    setTable(reducedDataGrid)
   }, [])
 
   return (
@@ -113,6 +152,20 @@ export default function Form() {
         valueRenderer={cell => cell.value}
         onCellsChanged={changes => {
           setGrid(prevGrid => {
+            const nextGrid = prevGrid.map(row => [...row]);
+            changes.forEach(({ cell, row, col, value }) => {
+              nextGrid[row][col] = { ...nextGrid[row][col], value };
+            })
+            return nextGrid;
+          })
+        }}
+      />
+      <hr/>
+      <ReactDataSheet
+        data={table}
+        valueRenderer={cell => cell.value}
+        onCellsChanged={changes => {
+          setTable(prevGrid => {
             const nextGrid = prevGrid.map(row => [...row]);
             changes.forEach(({ cell, row, col, value }) => {
               nextGrid[row][col] = { ...nextGrid[row][col], value };
